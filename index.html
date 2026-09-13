@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shell × Aerospace NBS - Financial Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090e;
+  --s1: #0c0f16;
+  --s2: #11151e;
+  --s3: #171c27;
+  --s4: #1f2535;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.11);
+  --y: #f0b429;
+  --y2: rgba(240,180,41,0.12);
+  --g: #00e5a0;
+  --g2: rgba(0,229,160,0.1);
+  --r: #ff3d55;
+  --r2: rgba(255,61,85,0.1);
+  --o: #ff8c00;
+  --o2: rgba(255,140,0,0.1);
+  --b: #4da6ff;
+  --b2: rgba(77,166,255,0.1);
+  --p: #b57aff;
+  --text: #ddd8ce;
+  --t2: #7a7468;
+  --t3: #3d3a34;
+  --mono: 'DM Mono', monospace;
+  --display: 'Chakra Petch', sans-serif;
+  --body: 'Cormorant Garamond', serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+
+/* ATMOSPHERIC BACKGROUND ORBS */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(240,180,41,0.055) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(77,166,255,0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 70% 80%, rgba(0,229,160,0.035) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 10% 85%, rgba(181,122,255,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 90% 40% at 50% 50%, rgba(255,61,85,0.018) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* SUBTLE DOT GRID OVERLAY */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:48px;background:rgba(7,9,14,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 2rem;gap:0;z-index:200;justify-content:space-between;overflow:hidden}
+.nav-brand{display:flex;align-items:center;gap:1rem;flex-shrink:0}
+.nav-logo{font-family:var(--display);font-size:1rem;letter-spacing:0.1em;color:var(--y);line-height:1;white-space:nowrap}
+.nav-sep{width:1px;height:20px;background:var(--border2);flex-shrink:0}
+.nav-sub{font-family:var(--mono);font-size:0.55rem;color:var(--t2);letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap}
+.nav-tabs{display:flex;gap:0;height:100%;overflow:hidden}
+.ntab{height:100%;padding:0 1.1rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--t2);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;position:relative;top:0;white-space:nowrap;flex-shrink:0}
+.ntab:hover{color:var(--text)}
+.ntab.active{color:var(--y);border-bottom-color:var(--y);text-shadow:0 0 12px rgba(240,180,41,0.4)}
+.nav-right{display:flex;align-items:center;gap:0.8rem;flex-shrink:0}
+.live-badge{display:flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.55rem;color:var(--g);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--g);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+@media(max-width:920px){.nav-sub,.nav-sep{display:none}}
+@media(max-width:680px){.live-badge{display:none}.ntab{padding:0 0.6rem;font-size:0.5rem}}
+
+/* WRAPPER */
+.wrap{margin-top:48px;position:relative;z-index:1}
+
+/* SECTION */
+.section{display:none;padding:2rem}
+.section.active{display:block}
+
+/* HEADER SECTION */
+.hero{border-bottom:1px solid var(--border);background:var(--bg);position:relative;overflow:hidden}
+
+/* canvas container with title overlaid */
+.hero-canvas-wrap{position:relative;width:100%;height:300px}
+.hero-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-canvas-fade{position:absolute;bottom:0;left:0;right:0;height:140px;background:linear-gradient(to bottom,transparent 0%,var(--bg) 100%);pointer-events:none;z-index:2}
+.hero-overlay{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center}
+
+.hero-eyebrow{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--y);border:1px solid rgba(245,197,24,0.3);background:rgba(7,9,14,0.55);padding:0.25rem 0.8rem;border-radius:2px;display:inline-block;margin-bottom:1rem;backdrop-filter:blur(6px)}
+.hero-title{font-family:var(--display);font-size:clamp(2.8rem,5.5vw,5.5rem);letter-spacing:0.06em;line-height:0.92;color:#fff;font-weight:600;text-shadow:0 2px 48px rgba(0,0,0,0.9),0 0 80px rgba(0,0,0,0.6)}
+
+/* desc below canvas */
+.hero-center{text-align:center;padding:1.6rem 2rem 0.6rem;position:relative;z-index:1}
+.hero-desc{font-family:var(--body);font-size:1.25rem;color:var(--t2);margin:0 auto;line-height:1.8;max-width:680px;font-weight:400;font-style:normal}
+
+/* thesis centered row */
+.hero-thesis-wrap{display:flex;justify-content:center;padding:1.4rem 2rem 2rem;position:relative;z-index:1}
+.hero-thesis{border:1px solid rgba(240,180,41,0.25);background:rgba(240,180,41,0.03);padding:1.8rem 2.2rem;border-radius:4px;width:100%;max-width:900px;min-width:50%;text-align:left;position:relative;overflow:hidden}
+.hero-thesis::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(240,180,41,0.05) 0%,transparent 70%);pointer-events:none}
+.thesis-label{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--g);margin-bottom:0.9rem;opacity:0.7}
+.thesis-body{font-family:var(--body);font-size:1.05rem;color:rgba(221,216,206,0.8);line-height:1.85;font-weight:400}
+.thesis-body strong{color:var(--text);font-weight:600}
+.thesis-stats{display:flex;gap:2.5rem;margin-top:1.4rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,0.07)}
+.ts{display:flex;flex-direction:column;gap:0.2rem}
+.ts-num{font-family:var(--mono);font-size:1.15rem;font-weight:500;color:var(--y)}
+.ts-lbl{font-family:var(--mono);font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t2)}
+
+.hero-date{font-family:var(--mono);font-size:0.58rem;color:var(--t3);letter-spacing:0.08em;position:relative;z-index:1}
+
+/* ── FLOATING SHAPES ─────────────────────────────────────────── */
+.float-shape{position:absolute;pointer-events:none;z-index:0;opacity:0}
+.float-shape.visible{opacity:1}
+@keyframes floatA{0%,100%{transform:translateY(0px) rotate(0deg)}50%{transform:translateY(-18px) rotate(4deg)}}
+@keyframes floatB{0%,100%{transform:translateY(0px) rotate(0deg)}50%{transform:translateY(-12px) rotate(-3deg)}}
+@keyframes floatC{0%,100%{transform:translateY(0px) scale(1)}50%{transform:translateY(-8px) scale(1.04)}}
+@keyframes rotateSlow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes pulseFade{0%,100%{opacity:0.18}50%{opacity:0.38}}
+
+/* ── ENTRY ANIMATIONS ────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes countUp{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+
+.anim-fadeup{animation:fadeUp 0.6s cubic-bezier(.22,1,.36,1) both}
+.anim-fadein{animation:fadeIn 0.5s ease both}
+.anim-slideright{animation:slideRight 0.5s cubic-bezier(.22,1,.36,1) both}
+.anim-countup{animation:countUp 0.5s cubic-bezier(.22,1,.36,1) both}
+
+/* stagger delays */
+.d1{animation-delay:0.05s}.d2{animation-delay:0.12s}.d3{animation-delay:0.2s}
+.d4{animation-delay:0.28s}.d5{animation-delay:0.36s}.d6{animation-delay:0.44s}
+.d7{animation-delay:0.52s}.d8{animation-delay:0.6s}
+
+/* ── SCROLL REVEAL ───────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.55s ease, transform 0.55s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ── HOVER UPGRADES ──────────────────────────────────────────── */
+.kpi-cell{transition:background .2s, transform .2s, box-shadow .2s}
+.kpi-cell:hover{background:var(--s2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.35)}
+.kpi-cell:hover .kpi-num{filter:brightness(1.15)}
+
+.dt-row{transition:background .12s, padding-left .15s}
+.dt-row:hover{padding-left:1.6rem}
+
+.card{transition:background .15s, transform .2s, box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+
+.num-card{transition:background .12s, transform .18s, border-color .18s}
+.num-card:hover{transform:translateY(-2px)}
+.num-card.pitch-crit:hover{border-left-color:var(--y);box-shadow:0 0 0 1px rgba(240,180,41,0.15)}
+
+.tl-col{transition:background .2s, transform .2s}
+.tl-col:hover{background:var(--s2);transform:translateY(-2px)}
+
+.out-panel{transition:background .15s}
+.out-panel:hover{background:var(--s2)}
+
+.m-cell{transition:background .18s, transform .18s}
+.m-cell:hover{transform:scale(1.02)}
+
+/* glow on active nav tab */
+.ntab.active{text-shadow:0 0 12px rgba(240,180,41,0.4)}
+
+/* hero title shimmer */
+.hero-title{background:linear-gradient(90deg,#fff 60%,rgba(240,180,41,0.6) 80%,#fff 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite}
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+.hero-title span{background:linear-gradient(90deg,var(--y),#ffdc6b,var(--y));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3.5s linear infinite}
+
+/* KPI STATS ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--border)}
+.kpi-cell{padding:1.4rem 1.6rem;border-right:1px solid var(--border);position:relative;transition:background .15s;cursor:default}
+.kpi-cell:hover{background:var(--s1)}
+.kpi-cell:last-child{border-right:none}
+.kpi-tag{font-family:var(--mono);font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t2);margin-bottom:0.5rem}
+.kpi-num{font-family:var(--mono);font-size:1.7rem;font-weight:500;letter-spacing:-0.03em;line-height:1}
+.kpi-num.y{color:var(--y)} .kpi-num.g{color:var(--g)} .kpi-num.r{color:var(--r)} .kpi-num.o{color:var(--o)} .kpi-num.b{color:var(--b)} .kpi-num.p{color:var(--p)}
+.kpi-desc{font-family:var(--mono);font-size:0.55rem;color:var(--t2);margin-top:0.35rem;line-height:1.5}
+.kpi-bar-bottom{position:absolute;bottom:0;left:0;height:2px;width:0!important;transition:width 0.7s cubic-bezier(.22,1,.36,1)}
+
+/* SECTION HEADER */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.sec-title-wrap .sec-eyebrow{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--t2);margin-bottom:0.3rem}
+.sec-title-wrap h2{font-family:var(--display);font-size:2rem;letter-spacing:0.08em;color:var(--text);font-weight:600}
+
+/* CARDS */
+.filter-bar{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.fb{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.75rem;border:1px solid var(--border2);background:transparent;color:var(--t2);border-radius:2px;cursor:pointer;transition:all .15s}
+.fb:hover{color:var(--text);border-color:var(--border2)}
+.fb.fa{background:var(--y);color:#000;border-color:var(--y);font-weight:700}
+.fb.fr{background:var(--r);color:#fff;border-color:var(--r)}
+.fb.fg{background:var(--g);color:#000;border-color:var(--g)}
+.fb.fo{background:var(--o);color:#000;border-color:var(--o)}
+.fb.fb2{background:var(--b);color:#000;border-color:var(--b)}
+
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.card{background:var(--s1);padding:1.4rem;cursor:pointer;transition:background .15s;border-top:2px solid var(--cc,var(--border));position:relative}
+.card:hover{background:var(--s2)}
+.card.card-hidden{display:none}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.6rem;gap:0.5rem}
+.card-cat{font-family:var(--mono);font-size:0.53rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t2)}
+.card-chip{font-family:var(--mono);font-size:0.52rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:2px;border:1px solid;color:var(--cc);border-color:color-mix(in srgb,var(--cc) 35%,transparent);background:color-mix(in srgb,var(--cc) 10%,transparent)}
+.card-title{font-family:var(--body);font-size:1.05rem;font-weight:600;line-height:1.4;margin-bottom:0.5rem;color:#fff}
+.card-desc{font-family:var(--body);font-size:0.95rem;line-height:1.75;color:var(--t2);font-weight:300}
+.card-kpis{margin-top:0.8rem}
+.kpi-line{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem}
+.kl-label{font-family:var(--mono);font-size:0.55rem;color:var(--t2);width:90px;flex-shrink:0}
+.kl-track{flex:1;height:2px;background:var(--s4);border-radius:1px;overflow:hidden}
+.kl-fill{height:100%;background:var(--cc);border-radius:1px;width:0;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.kl-val{font-family:var(--mono);font-size:0.55rem;color:var(--cc);width:25px;text-align:right}
+.card-expand{display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.card.open .card-expand{display:block}
+.expand-head{font-family:var(--mono);font-size:0.53rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t2);margin-bottom:0.5rem;margin-top:0.8rem}
+.expand-head:first-child{margin-top:0}
+.expand-list{list-style:none}
+.expand-list li{font-family:var(--body);font-size:0.9rem;color:var(--t2);line-height:1.8;padding:0.1rem 0}
+.expand-list li::before{content:'→ ';color:var(--cc)}
+.card-hint{font-family:var(--mono);font-size:0.55rem;color:var(--t3);text-align:right;margin-bottom:0.6rem;font-style:italic}
+
+/* SCENARIO MODELER */
+.modeler-wrap{display:grid;grid-template-columns:300px 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.mod-controls{background:var(--s1);padding:1.6rem}
+.mod-output{background:var(--s2);padding:1.6rem}
+.ctrl-section{margin-bottom:1.6rem}
+.ctrl-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t2);margin-bottom:0.6rem;display:flex;justify-content:space-between}
+.ctrl-val{color:var(--y)}
+.scen-btns{display:flex;gap:0.4rem;margin-bottom:1.6rem}
+.sb{flex:1;padding:0.5rem 0.2rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--border2);background:transparent;color:var(--t2);border-radius:2px;cursor:pointer;transition:all .15s;text-align:center}
+.sb.active{background:var(--y);color:#000;border-color:var(--y);font-weight:700}
+input[type=range]{-webkit-appearance:none;width:100%;height:2px;background:var(--s4);border-radius:1px;outline:none;cursor:pointer;margin:0.6rem 0 1rem}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--y);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 0 3px rgba(245,197,24,.15);transition:box-shadow .15s}
+input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 6px rgba(245,197,24,.15)}
+.tam-row{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:0.62rem;color:var(--t2);margin-bottom:1.2rem}
+.tgl{position:relative;width:34px;height:18px;cursor:pointer}
+.tgl input{display:none}
+.tgl-track{position:absolute;inset:0;background:var(--s4);border-radius:9px;border:1px solid var(--border2);transition:all .2s}
+.tgl-thumb{position:absolute;left:3px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:50%;background:var(--t2);transition:all .2s}
+.tgl input:checked~.tgl-track{background:rgba(245,197,24,.15);border-color:var(--y)}
+.tgl input:checked~.tgl-thumb{left:19px;background:var(--y)}
+
+/* OUTPUT PANELS */
+.out-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:visible;margin-bottom:1.2rem}
+.out-panel{background:var(--s1);padding:1.1rem 1.3rem;overflow:visible}
+.out-label{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t2);margin-bottom:0.4rem}
+.out-big{font-family:var(--mono);font-size:1.9rem;font-weight:500;letter-spacing:-0.03em;line-height:1;transition:all .3s}
+.out-big.y{color:var(--y)} .out-big.g{color:var(--g)} .out-big.o{color:var(--o)} .out-big.b{color:var(--b)} .out-big.r{color:var(--r)}
+.out-sub{font-family:var(--mono);font-size:0.55rem;color:var(--t2);margin-top:0.3rem;line-height:1.5}
+.breakdown{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:0.65rem;margin-top:1rem}
+.breakdown th{font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);text-align:left;padding:0.4rem 0.6rem;border-bottom:1px solid var(--border)}
+.breakdown td{padding:0.5rem 0.6rem;border-bottom:1px solid var(--border);color:var(--t2)}
+.breakdown td:last-child{text-align:right}
+.breakdown tr:last-child td{border-bottom:none}
+.breakdown tr:hover td{background:var(--s3);color:var(--text)}
+
+/* ── TOOLTIPS ── */
+.tip-wrap{display:inline;cursor:help}
+.tip-wrap .tip{
+  display:none;
+  position:fixed;
+  background:#0f1318;border:1px solid rgba(240,180,41,0.45);
+  color:var(--t2);font-family:var(--mono);font-size:0.58rem;line-height:1.6;
+  padding:0.6rem 0.9rem;border-radius:3px;white-space:normal;width:260px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.9);z-index:99999;
+  pointer-events:none;
+}
+.tip-icon{font-family:var(--mono);font-size:0.5rem;color:var(--t3);margin-left:0.3rem;vertical-align:middle;border:1px solid var(--t3);border-radius:50%;width:12px;height:12px;display:inline-flex;align-items:center;justify-content:center;line-height:1;cursor:help;overflow:visible}
+
+/* ── METRIC EXPLAINER ── */
+.metric-explainer{background:var(--s1);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:1.2rem}
+.me-tabs{display:flex;align-items:center;gap:0;padding:0 0.4rem;border-bottom:1px solid transparent;flex-wrap:wrap}
+.me-hint{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);padding:0.6rem 0.8rem;flex-shrink:0}
+.me-arrow{display:inline-block;animation:bounceRight 1.2s ease-in-out infinite;margin-right:0.3rem;color:rgba(240,180,41,0.4)}
+@keyframes bounceRight{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+.me-btn{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--t2);background:none;border:none;border-bottom:2px solid transparent;padding:0.65rem 0.9rem;cursor:pointer;transition:color 0.15s,border-color 0.15s;white-space:nowrap}
+.me-btn:hover{color:var(--text)}
+.me-btn.active{color:var(--y);border-bottom-color:var(--y)}
+.me-body{position:relative;padding:0.9rem 1.1rem;border-top:1px solid var(--border);animation:fadeIn 0.15s ease}
+.me-close{position:absolute;top:0.7rem;right:0.9rem;font-family:var(--mono);font-size:0.6rem;color:var(--t3);cursor:pointer;line-height:1}
+.me-close:hover{color:var(--text)}
+.me-content{font-family:var(--mono);font-size:0.62rem;color:var(--t2);line-height:1.8;max-width:680px}
+.me-content strong{color:var(--text)}
+.me-content .me-formula{font-size:0.58rem;color:var(--t3);margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.formula-panel{background:var(--s1);border:1px solid rgba(240,180,41,0.2);border-radius:3px;margin-top:1.2rem;overflow:hidden}
+.formula-toggle{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.1rem;cursor:pointer;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--y);border-bottom:1px solid transparent;transition:border-color 0.2s}
+.formula-toggle.open{border-bottom-color:rgba(240,180,41,0.2)}
+.formula-toggle:hover{background:var(--s3)}
+.formula-toggle .ftarrow{transition:transform 0.2s}
+.formula-toggle.open .ftarrow{transform:rotate(180deg)}
+.formula-body{display:none;padding:1.1rem 1.3rem}
+.formula-body.open{display:block}
+.formula-chain{display:flex;flex-direction:column;gap:0.6rem}
+.formula-step{display:grid;grid-template-columns:200px 1fr auto;gap:0.8rem;align-items:center;padding:0.5rem 0.7rem;border-radius:2px;background:var(--s3);border-left:2px solid var(--border)}
+.formula-step.hl-y{border-left-color:var(--y)}
+.formula-step.hl-g{border-left-color:var(--g)}
+.formula-step.hl-b{border-left-color:var(--b)}
+.formula-step.hl-r{border-left-color:var(--r)}
+.formula-step.hl-o{border-left-color:var(--o)}
+.fs-label{font-family:var(--mono);font-size:0.58rem;color:var(--t2)}
+.fs-formula{font-family:var(--mono);font-size:0.6rem;color:var(--t3)}
+.fs-val{font-family:var(--mono);font-size:0.75rem;font-weight:600;text-align:right;white-space:nowrap}
+.formula-divider{font-family:var(--mono);font-size:0.52rem;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin:0.6rem 0 0.3rem;padding-bottom:0.3rem;border-bottom:1px solid var(--border)}
+
+/* ── CBAM vs MARGIN callout ── */
+.cbam-margin-strip{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:visible;margin-top:1.2rem}
+.cms-panel{background:var(--s1);padding:1rem 1.2rem}
+.cms-label{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);margin-bottom:0.4rem}
+.cms-val{font-family:var(--mono);font-size:1.1rem;font-weight:600;margin-bottom:0.25rem}
+.cms-sub{font-family:var(--mono);font-size:0.58rem;color:var(--t2);line-height:1.5}
+.bval{font-weight:500}
+.bval.g{color:var(--g)}.bval.y{color:var(--y)}.bval.o{color:var(--o)}.bval.r{color:var(--r)}
+.mini-bar-wrap{display:flex;align-items:center;gap:0.4rem}
+.mini-bar{width:50px;height:2px;background:var(--s4);border-radius:1px;overflow:hidden}
+.mini-fill{height:100%;border-radius:1px;transition:width .5s ease}
+.insight-box{background:var(--s1);border:1px solid var(--border2);border-left:3px solid var(--y);padding:0.9rem 1.1rem;border-radius:0 3px 3px 0;margin-top:1rem}
+.insight-label{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--y);margin-bottom:0.4rem}
+.insight-text{font-family:var(--body);font-size:0.95rem;color:var(--t2);line-height:1.8}
+.insight-text strong{color:var(--text)}
+
+/* NUMBERS BROWSER */
+.nums-controls{display:flex;gap:0.6rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+.search-inp{flex:1;min-width:200px;background:var(--s1);border:1px solid var(--border2);border-radius:2px;padding:0.55rem 0.9rem;font-family:var(--mono);font-size:0.7rem;color:var(--text);outline:none;transition:border-color .15s}
+.search-inp::placeholder{color:var(--t3)}
+.search-inp:focus{border-color:rgba(245,197,24,.4)}
+.cat-sel{background:var(--s1);border:1px solid var(--border2);border-radius:2px;padding:0.55rem 0.9rem;font-family:var(--mono);font-size:0.65rem;color:var(--t2);outline:none;cursor:pointer;letter-spacing:0.04em}
+.pitch-tog{display:flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.6rem;color:var(--t2);cursor:pointer;border:1px solid var(--border2);border-radius:2px;padding:0.55rem 0.9rem;transition:all .15s;user-select:none}
+.pitch-tog.on{border-color:var(--y);color:var(--y);background:rgba(245,197,24,.05)}
+.num-count{font-family:var(--mono);font-size:0.58rem;color:var(--t3);letter-spacing:0.08em;margin-left:auto}
+.nums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.num-card{background:var(--s1);padding:1rem 1.1rem;cursor:pointer;transition:background .15s;border-left:2px solid transparent;position:relative}
+.num-card:hover{background:var(--s2)}
+.num-card.pitch-crit{border-left-color:var(--y)}
+.num-card.num-hidden{display:none}
+.num-top{display:flex;justify-content:space-between;align-items:flex-start;gap:0.4rem;margin-bottom:0.3rem}
+.num-cat{font-family:var(--mono);font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3)}
+.num-badge{font-family:var(--mono);font-size:0.5rem;padding:0.1rem 0.4rem;border:1px solid rgba(245,197,24,.3);color:var(--y);border-radius:1px}
+.num-val{font-family:var(--mono);font-size:1.3rem;font-weight:500;letter-spacing:-0.02em;color:var(--text);line-height:1.1;margin-bottom:0.25rem}
+.num-lbl{font-family:var(--body);font-size:0.9rem;color:var(--t2);line-height:1.6;font-weight:300}
+.num-src{display:none;font-family:var(--mono);font-size:0.6rem;color:var(--t3);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.6}
+.num-card.open .num-src{display:block}
+.num-card.open .num-val{color:var(--y)}
+
+/* MATRIX */
+.matrix-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.matrix-wrap{background:var(--s1);border:1px solid var(--border);border-radius:3px;padding:1.5rem}
+.matrix-title{font-family:var(--display);font-size:1.5rem;letter-spacing:0.06em;margin-bottom:0.3rem;font-weight:600}
+.matrix-sub{font-family:var(--body);font-size:0.9rem;color:var(--t2);margin-bottom:1.2rem;line-height:1.6;font-style:italic}
+.m-grid{display:grid;grid-template-columns:28px 1fr 1fr;grid-template-rows:1fr 1fr 28px;gap:3px;height:260px}
+.m-y-axis{grid-column:1;grid-row:1/3;display:flex;align-items:center;justify-content:center}
+.m-y-axis span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3)}
+.m-x-axis{grid-column:2/4;grid-row:3;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3)}
+.m-cell{border-radius:2px;padding:0.9rem;display:flex;flex-direction:column;gap:0.3rem;overflow:hidden}
+.m-tl{background:rgba(255,61,85,0.07);border:1px solid rgba(255,61,85,0.15);grid-column:2;grid-row:1}
+.m-tr{background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.15);grid-column:3;grid-row:1}
+.m-bl{background:rgba(77,166,255,0.05);border:1px solid rgba(77,166,255,0.12);grid-column:2;grid-row:2}
+.m-br{background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.12);grid-column:3;grid-row:2}
+.m-label{font-family:var(--mono);font-size:0.52rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.3rem}
+.m-tl .m-label{color:var(--r)} .m-tr .m-label{color:var(--y)} .m-bl .m-label{color:var(--b)} .m-br .m-label{color:var(--g)}
+.m-item{font-family:var(--body);font-size:0.82rem;line-height:1.5;color:var(--t2);padding:0.18rem 0.4rem;background:rgba(255,255,255,0.03);border-radius:1px;border-left:2px solid}
+.m-tl .m-item{border-color:var(--r)} .m-tr .m-item{border-color:var(--y)} .m-bl .m-item{border-color:var(--b)} .m-br .m-item{border-color:var(--g)}
+
+/* TIMELINE */
+.timeline-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:1.5rem}
+.tl-col{background:var(--s1);padding:1.3rem}
+.tl-year{font-family:var(--display);font-size:2rem;letter-spacing:0.04em;margin-bottom:0.2rem}
+.tl-year.y{color:var(--y)} .tl-year.g{color:var(--g)} .tl-year.o{color:var(--o)} .tl-year.b{color:var(--b)}
+.tl-subtitle{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t2);margin-bottom:0.9rem;padding-bottom:0.7rem;border-bottom:1px solid var(--border)}
+.tl-item{display:flex;gap:0.5rem;margin-bottom:0.7rem;align-items:flex-start}
+.tl-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:0.35rem}
+.tl-text{font-family:var(--body);font-size:0.9rem;color:var(--t2);line-height:1.7}
+.tl-text strong{color:var(--text)}
+.tl-price-track{margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border)}
+.tl-price-label{font-family:var(--mono);font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem}
+.price-bar-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem}
+.pbr-label{font-family:var(--mono);font-size:0.55rem;color:var(--t2);width:35px}
+.pbr-track{flex:1;height:3px;background:var(--s4);border-radius:2px;overflow:hidden}
+.pbr-fill{height:100%;border-radius:2px}
+.pbr-val{font-family:var(--mono);font-size:0.58rem;font-weight:500;width:40px;text-align:right}
+
+/* WINDOW ALERT */
+.window-alert{background:rgba(255,61,85,0.05);border:1px solid rgba(255,61,85,0.2);border-radius:3px;padding:1.2rem 1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.2rem}
+.wa-icon{font-size:1.4rem;flex-shrink:0}
+.wa-text{font-family:var(--body);font-size:1rem;color:var(--t2);line-height:1.8}
+.wa-text strong{color:var(--r)}
+
+/* OVERVIEW LAYOUT */
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.data-table-wrap{background:var(--s1);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.dt-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.dt-title{font-family:var(--display);font-size:1.15rem;letter-spacing:0.08em;font-weight:600}
+.dt-badge{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.08em;padding:0.15rem 0.5rem;border:1px solid var(--border2);color:var(--t2);border-radius:1px}
+.dt-body{padding:0}
+.dt-row{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 1.3rem;border-bottom:1px solid var(--border);transition:background .12s}
+.dt-row:last-child{border-bottom:none}
+.dt-row:hover{background:var(--s2)}
+.dt-key{font-family:var(--body);font-size:0.9rem;color:var(--t2);font-style:normal}
+.dt-val{font-family:var(--mono);font-size:0.75rem;font-weight:500}
+.dt-val.y{color:var(--y)} .dt-val.g{color:var(--g)} .dt-val.r{color:var(--r)} .dt-val.o{color:var(--o)} .dt-val.b{color:var(--b)}
+
+/* CBAM CALC */
+.cbam-wrap{background:var(--s1);border:1px solid var(--border);border-radius:3px;padding:1.5rem;margin-bottom:1.5rem}
+.cbam-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:1rem}
+.cbam-cell{background:var(--s2);padding:1rem}
+.cbam-scenario{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t2);margin-bottom:0.4rem}
+.cbam-cost{font-family:var(--mono);font-size:1.4rem;font-weight:500;letter-spacing:-0.02em}
+.cbam-sub{font-family:var(--mono);font-size:0.58rem;color:var(--t2);margin-top:0.2rem}
+.cbam-saving{font-family:var(--mono);font-size:0.65rem;color:var(--g);margin-top:0.5rem;font-weight:500}
+
+/* FOOTER */
+.dash-footer{text-align:center;font-family:var(--mono);font-size:0.55rem;color:var(--t3);padding:1.5rem;border-top:1px solid var(--border);letter-spacing:0.06em}
+
+/* OVERVIEW FULL-WIDTH TABLES */
+.full-table-wrap{background:var(--s1);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:1.2rem}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">SHELL × NBS</div>
+    <div class="nav-sep"></div>
+    <div class="nav-sub">Financial Intelligence Platform · PIE Challenge 2026</div>
+  </div>
+  <div class="nav-tabs">
+    <button class="ntab active" data-sec="overview">Overview</button>
+    <button class="ntab" data-sec="modeler">Scenario Modeler</button>
+    <button class="ntab" data-sec="cards">Research Cards</button>
+    <button class="ntab" data-sec="numbers">Search Statistics</button>
+    <button class="ntab" data-sec="matrix">Strategy Matrix</button>
+    <button class="ntab" data-sec="timeline">Timeline & Window</button>
+  </div>
+  <div class="nav-right">
+    <div class="live-badge"><div class="live-dot"></div> Live Dashboard</div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════════════ OVERVIEW -->
+<div id="sec-overview" class="section active" style="padding:0">
+
+  <div class="hero">
+    <!-- canvas + overlaid title -->
+    <div class="hero-canvas-wrap">
+      <canvas id="hero-canvas" style="display:block;width:100%;height:100%"></canvas>
+      <!-- bottom fade -->
+      <div class="hero-canvas-fade"></div>
+      <!-- overlaid text -->
+      <div class="hero-overlay">
+        <div class="hero-eyebrow">Shell PIE Challenge · March 2026</div>
+        <div class="hero-title">CARBON RISK<br>INFRASTRUCTURE<br><span>FOR THE AEROSPACE INDUSTRY</span></div>
+      </div>
+    </div>
+
+    <!-- desc below canvas, still centered -->
+    <div class="hero-center">
+      <div class="hero-desc">Shell as the decarbonisation backbone of the aerospace manufacturing supply chain - not an offset seller, but an embedded CFO-level compliance instrument. Targeting SpaceX's 3,000+ supplier network and the $1.5T IPO investor ESG scrutiny window.</div>
+    </div>
+
+    <!-- centered thesis box -->
+    <div class="hero-thesis-wrap">
+      <div class="hero-thesis">
+        <div class="thesis-label">Core Thesis</div>
+        <div class="thesis-body">A single procurement line item - <strong>"Carbon-Neutral Aerospace Aluminum, Shell Certified"</strong> - bundles forward carbon contracts, CBAM compliance documentation, and a nature-backed credit portfolio into one embedded instrument.</div>
+        <div class="thesis-body" style="margin-top:0.8rem">Shell flips NBS from a <strong style="color:var(--r)">$52M/yr cost centre</strong> to a <strong style="color:var(--g)">$22.5M–$281M/yr profit centre</strong>, anchored by SpaceX's $1.5T IPO ESG window and a 12–18 month first-mover advantage before competitors lock in the aerospace supply chain.</div>
+        <div class="thesis-stats">
+          <div class="ts"><span class="ts-num">15M</span><span class="ts-lbl">tCO₂/yr TAM</span></div>
+          <div class="ts"><span class="ts-num" style="color:var(--g)">$281M</span><span class="ts-lbl">Aggressive upside</span></div>
+          <div class="ts"><span class="ts-num" style="color:var(--r)">12mo</span><span class="ts-lbl">Window closes</span></div>
+          <div class="ts"><span class="ts-num" style="color:var(--b)">3,000+</span><span class="ts-lbl">SpaceX suppliers</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-date" style="text-align:center;padding-bottom:1.5rem">Last updated: March 2026</div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi-cell">
+      <div class="kpi-tag">Shell Q4 2025 Earnings</div>
+      <div class="kpi-num r">$3.26B</div>
+      <div class="kpi-desc">Weakest in 5 years. 40% YoY decline. Missed $3.53B expectation.</div>
+      <div class="kpi-bar-bottom" data-w="35%" style="background:var(--r);width:0"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-tag">Shell NBS Buy Price 2024</div>
+      <div class="kpi-num r">$4.15/t</div>
+      <div class="kpi-desc">Near CCC–B floor. High-quality credits: $14.80/t. 3.5× gap = revenue uplift opportunity.</div>
+      <div class="kpi-bar-bottom" data-w="28%" style="background:var(--r);width:0"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-tag">Aerospace TAM (2025)</div>
+      <div class="kpi-num y">$600M/yr</div>
+      <div class="kpi-desc">15Mt residual × $40/t. Expands to $1.8B/yr at $75/t. 3× by 2035.</div>
+      <div class="kpi-bar-bottom" data-w="60%" style="background:var(--y);width:0"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-tag">SpaceX IPO Valuation</div>
+      <div class="kpi-num y">$1.5T</div>
+      <div class="kpi-desc">2026. ESG investor scrutiny window. Morgan Stanley + Goldman Sachs leading.</div>
+      <div class="kpi-bar-bottom" data-w="90%" style="background:var(--y);width:0"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-tag">Base Case Shell Revenue</div>
+      <div class="kpi-num g">$36M/yr</div>
+      <div class="kpi-desc">900k tonnes × $40/t. Covers 69% of $52M NBS investment from aerospace alone.</div>
+      <div class="kpi-bar-bottom" data-w="70%" style="background:var(--g);width:0"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-tag">Competitive Window</div>
+      <div class="kpi-num o">12–18mo</div>
+      <div class="kpi-desc">Before first-mover advantage closes. South Pole 2026 buyer guide confirms pivotal phase.</div>
+      <div class="kpi-bar-bottom" data-w="55%" style="background:var(--o);width:0"></div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW GRIDS -->
+  <div style="padding:2rem">
+
+    <div class="overview-grid">
+      <!-- Shell Financial Health -->
+      <div class="data-table-wrap">
+        <div class="dt-head"><div class="dt-title">SHELL FINANCIALS</div><div class="dt-badge">§1 · Internal</div></div>
+        <div class="dt-body">
+          <div class="dt-row"><span class="dt-key">FY2024 Earnings</span><span class="dt-val r">$23.7B</span></div>
+          <div class="dt-row"><span class="dt-key">vs FY2023</span><span class="dt-val r">−$4.6B YoY</span></div>
+          <div class="dt-row"><span class="dt-key">Net Debt Q4 2025</span><span class="dt-val r">$45.7B</span></div>
+          <div class="dt-row"><span class="dt-key">Gearing</span><span class="dt-val r">20.7%</span></div>
+          <div class="dt-row"><span class="dt-key">RES Segment Net Expense</span><span class="dt-val r">$2.2–2.4B</span></div>
+          <div class="dt-row"><span class="dt-key">RES Q4 Impairment</span><span class="dt-val r">$996M</span></div>
+          <div class="dt-row"><span class="dt-key">Total Low-Carbon Impairment</span><span class="dt-val r">$4.4B</span></div>
+          <div class="dt-row"><span class="dt-key">Reserve Life</span><span class="dt-val r">&lt;8 yrs</span></div>
+          <div class="dt-row"><span class="dt-key">Low-Carbon Investment (2023–25)</span><span class="dt-val o">$10–15B</span></div>
+          <div class="dt-row"><span class="dt-key">Total NBS Committed</span><span class="dt-val y">~$450M</span></div>
+          <div class="dt-row"><span class="dt-key">Annual NBS Spend</span><span class="dt-val y">$52M/yr</span></div>
+          <div class="dt-row"><span class="dt-key">EU ETS Compliance 2022</span><span class="dt-val o">$493M</span></div>
+          <div class="dt-row"><span class="dt-key">B2B Customers</span><span class="dt-val b">~1M · 70+ countries</span></div>
+          <div class="dt-row"><span class="dt-key">LNG Growth Target</span><span class="dt-val g">4–5%/yr to 2030</span></div>
+        </div>
+      </div>
+
+      <!-- NCI Pressure -->
+      <div class="data-table-wrap">
+        <div class="dt-head"><div class="dt-title">NCI & EXEC PRESSURE</div><div class="dt-badge">§22 · Why Now</div></div>
+        <div class="dt-body">
+          <div class="dt-row"><span class="dt-key">NCI 2016 baseline</span><span class="dt-val b">79 gCO₂e/MJ</span></div>
+          <div class="dt-row"><span class="dt-key">NCI 2021</span><span class="dt-val b">77 gCO₂e/MJ</span></div>
+          <div class="dt-row"><span class="dt-key">NCI 2022</span><span class="dt-val b">76 gCO₂e/MJ</span></div>
+          <div class="dt-row"><span class="dt-key">NCI 2023</span><span class="dt-val y">74 gCO₂e/MJ</span></div>
+          <div class="dt-row"><span class="dt-key">NCI 2024 (est.)</span><span class="dt-val y">~71 gCO₂e/MJ</span></div>
+          <div class="dt-row"><span class="dt-key">NCI 2030 Target</span><span class="dt-val r">15–20% vs 2016</span></div>
+          <div class="dt-row"><span class="dt-key">2035 Target (scrapped)</span><span class="dt-val r">45% - abandoned</span></div>
+          <div class="dt-row"><span class="dt-key">LTIP NCI Weighting</span><span class="dt-val o">25% of awards</span></div>
+          <div class="dt-row"><span class="dt-key">PSP NCI Weighting</span><span class="dt-val o">12.5% of awards</span></div>
+          <div class="dt-row"><span class="dt-key">Scope 1+2 (2023)</span><span class="dt-val b">57 Mt CO₂e</span></div>
+          <div class="dt-row"><span class="dt-key">Scope 3 (2023)</span><span class="dt-val r">1,147 Mt CO₂e</span></div>
+          <div class="dt-row"><span class="dt-key">Shareholder vote vs Shell plan</span><span class="dt-val r">21.8% against · 2024 AGM</span></div>
+          <div class="dt-row"><span class="dt-key">Follow This vote (peak)</span><span class="dt-val o">~30% · 2021</span></div>
+          <div class="dt-row"><span class="dt-key">CCS vs NBS Gap</span><span class="dt-val r">6.7Mt vs 120Mt ambition</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overview-grid">
+      <!-- NBS Project Portfolio -->
+      <div class="data-table-wrap">
+        <div class="dt-head"><div class="dt-title">NBS PROJECT PORTFOLIO</div><div class="dt-badge">§3 · Assets</div></div>
+        <div class="dt-body">
+          <div class="dt-row"><span class="dt-key">Select Carbon (Australia)</span><span class="dt-val g">9M+ hectares</span></div>
+          <div class="dt-row"><span class="dt-key">Cordillera Azul (Peru)</span><span class="dt-val g">2.4M hectares</span></div>
+          <div class="dt-row"><span class="dt-key">Kasigau Corridor (Kenya)</span><span class="dt-val g">~200k ha · 1.8M credits/yr</span></div>
+          <div class="dt-row"><span class="dt-key">Kasigau - community jobs</span><span class="dt-val y">400+ jobs · 15 schools</span></div>
+          <div class="dt-row"><span class="dt-key">Kasigau - cumulative</span><span class="dt-val g">13.9M tCO₂e reduced</span></div>
+          <div class="dt-row"><span class="dt-key">Senegal Mangrove (WeForest)</span><span class="dt-val g">3,834 hectares</span></div>
+          <div class="dt-row"><span class="dt-key">Saloum delta ecosystem value</span><span class="dt-val g">€1.5B services · €3B labour/10yr</span></div>
+          <div class="dt-row"><span class="dt-key">Katingan Mentaya (Indonesia)</span><span class="dt-val g">REDD+ peat swamp</span></div>
+          <div class="dt-row"><span class="dt-key">Shell Quest CCS (Canada)</span><span class="dt-val b">1.2Mt/yr · >7Mt stored</span></div>
+          <div class="dt-row"><span class="dt-key">Northern Lights JV (Shell 33.3%)</span><span class="dt-val b">1.5→5Mt/yr · NOK 7.5B Phase 2</span></div>
+          <div class="dt-row"><span class="dt-key">2035 CCS Ambition</span><span class="dt-val b">25Mt/yr access</span></div>
+          <div class="dt-row"><span class="dt-key">Credits Retired 2023 (peak)</span><span class="dt-val y">21.8M = 18% of ambition</span></div>
+          <div class="dt-row"><span class="dt-key">Credits Retired 2024</span><span class="dt-val r">14.5M = 12% of ambition</span></div>
+          <div class="dt-row"><span class="dt-key">Shell NCI credits 2023</span><span class="dt-val y">20Mt (85% Verra-certified)</span></div>
+        </div>
+      </div>
+
+      <!-- Aerospace Supply Chain -->
+      <div class="data-table-wrap">
+        <div class="dt-head"><div class="dt-title">AEROSPACE SUPPLY CHAIN</div><div class="dt-badge">§8–9 · Target Market</div></div>
+        <div class="dt-body">
+          <div class="dt-row"><span class="dt-key">Titanium footprint (Kroll process)</span><span class="dt-val r">~55 kgCO₂/kg produced</span></div>
+          <div class="dt-row"><span class="dt-key">Titanium buy-to-fly waste</span><span class="dt-val r">90% → 550 kgCO₂/kg flown</span></div>
+          <div class="dt-row"><span class="dt-key">Aluminum (aerospace-grade)</span><span class="dt-val o">12–16 tCO₂/tonne</span></div>
+          <div class="dt-row"><span class="dt-key">Carbon fiber</span><span class="dt-val o">20–31 tCO₂/tonne</span></div>
+          <div class="dt-row"><span class="dt-key">Starship - per launch</span><span class="dt-val r">~2,683 tCO₂e</span></div>
+          <div class="dt-row"><span class="dt-key">Spacecraft lifecycle - pre-factory</span><span class="dt-val o">>90% embedded in materials</span></div>
+          <div class="dt-row"><span class="dt-key">Tier-1 supplier total emissions</span><span class="dt-val o">~600k tCO₂/yr</span></div>
+          <div class="dt-row"><span class="dt-key">After 50% abatement (residual)</span><span class="dt-val y">~300k tCO₂/yr per supplier</span></div>
+          <div class="dt-row"><span class="dt-key">TAM residual (50 suppliers)</span><span class="dt-val y">15M tCO₂/yr</span></div>
+          <div class="dt-row"><span class="dt-key">A&D manufacturers (all tiers)</span><span class="dt-val b">~12,000 globally</span></div>
+          <div class="dt-row"><span class="dt-key">SpaceX external suppliers</span><span class="dt-val b">3,000+ · 1,100/week</span></div>
+          <div class="dt-row"><span class="dt-key">SpaceX in-house build ratio</span><span class="dt-val b">~85% vertical integration</span></div>
+          <div class="dt-row"><span class="dt-key">EcoVadis scorecards 2024</span><span class="dt-val g">~5,000 (target 10,000)</span></div>
+          <div class="dt-row"><span class="dt-key">Aircraft mfg sector emissions</span><span class="dt-val o">18.1 MtCO₂e/yr · Al = 56%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CBAM Section -->
+    <div class="full-table-wrap" style="margin-bottom:1.2rem">
+      <div class="dt-head"><div class="dt-title">CBAM - CARBON BORDER ADJUSTMENT MECHANISM</div><div class="dt-badge">§7 · Definitive Phase Jan 2026</div></div>
+      <div style="padding:1.2rem 1.3rem">
+        <div style="font-family:var(--mono);font-size:0.62rem;color:var(--t2);margin-bottom:1rem;line-height:1.7">CBAM entered definitive financial phase <strong style="color:var(--y)">January 1, 2026</strong>. Certificates due Feb 1, 2027 (retroactive to all 2026 embedded emissions). Certificate price linked to EU ETS: currently <strong style="color:var(--y)">€70–84/tonne</strong>. Shell NBS credits covering the same volume cost <strong style="color:var(--g)">2–4× less</strong> per tonne.</div>
+        <div class="cbam-grid">
+          <div class="cbam-cell">
+            <div class="cbam-scenario">20,000t Aluminum Importer / CBAM Today (€80/t)</div>
+            <div class="cbam-cost" style="color:var(--r)">€4.16M/yr</div>
+            <div class="cbam-sub">52,000 tCO₂e embedded · 2.6t CO₂/t default</div>
+            <div class="cbam-saving">Shell NBS @$25/t: $1.3M/yr - saves €2.9M</div>
+          </div>
+          <div class="cbam-cell">
+            <div class="cbam-scenario">Same Importer / CBAM 2030 Forecast (€120/t)</div>
+            <div class="cbam-cost" style="color:var(--r)">€6.24M/yr</div>
+            <div class="cbam-sub">Same volume - 50% cost increase in 4 years</div>
+            <div class="cbam-saving">Shell NBS @$40/t: $2.08M/yr - saves €4.2M</div>
+          </div>
+          <div class="cbam-cell">
+            <div class="cbam-scenario">Airbus Fleet (766 A320neos · €80/t)</div>
+            <div class="cbam-cost" style="color:var(--o)">€3.67M/yr</div>
+            <div class="cbam-sub">45,807 tCO₂e · 23t Al/aircraft · 59.8 tCO₂/aircraft</div>
+            <div class="cbam-saving">Shell NBS @$25/t: $1.14M/yr - saves €2.5M</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:1px">
+          <div style="background:var(--s2);padding:0.8rem 1rem"><div class="out-label">CSRD Threshold (Non-EU)</div><div style="font-family:var(--mono);font-size:0.85rem;color:var(--y)">€450M EU turnover</div></div>
+          <div style="background:var(--s2);padding:0.8rem 1rem"><div class="out-label">CSRD Threshold (Subsidiaries)</div><div style="font-family:var(--mono);font-size:0.85rem;color:var(--y)">€200M EU turnover</div></div>
+          <div style="background:var(--s2);padding:0.8rem 1rem"><div class="out-label">California Cap-and-Trade</div><div style="font-family:var(--mono);font-size:0.85rem;color:var(--o)">25,000 tCO₂/yr threshold</div></div>
+          <div style="background:var(--s2);padding:0.8rem 1rem"><div class="out-label">New ETS Expansions (2026)</div><div style="font-family:var(--mono);font-size:0.85rem;color:var(--o)">China · India · Singapore</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLL & Community -->
+    <div class="overview-grid">
+      <div class="data-table-wrap">
+        <div class="dt-head"><div class="dt-title">SUSTAINABILITY-LINKED LOANS</div><div class="dt-badge">§14 · Buyer Incentive</div></div>
+        <div class="dt-body">
+          <div class="dt-row"><span class="dt-key">Total SLL market (2024)</span><span class="dt-val g">$463B outstanding</span></div>
+          <div class="dt-row"><span class="dt-key">SLL as % of all loan issuances</span><span class="dt-val g">~10%</span></div>
+          <div class="dt-row"><span class="dt-key">Carbon KPI prevalence</span><span class="dt-val y">Most common SLL KPI</span></div>
+          <div class="dt-row"><span class="dt-key">Verified credits as SLL KPI</span><span class="dt-val g">Standard Chartered precedent ✓</span></div>
+          <div class="dt-row"><span class="dt-key">NZBA departure (GS/MS)</span><span class="dt-val o">Exited 2025 · SLL products active</span></div>
+        </div>
+      </div>
+      <div class="data-table-wrap">
+        <div class="dt-head"><div class="dt-title">COMMUNITY CO-BENEFITS</div><div class="dt-badge">§18 · ESG Narrative</div></div>
+        <div class="dt-body">
+          <div class="dt-row"><span class="dt-key">Kenya/Nigeria mandatory community share</span><span class="dt-val g">25–40% of revenue</span></div>
+          <div class="dt-row"><span class="dt-key">Kasigau community split</span><span class="dt-val g">1/3 landowners + 50/50 profit</span></div>
+          <div class="dt-row"><span class="dt-key">Sistema.bio farm income boost</span><span class="dt-val g">+$580/yr per household</span></div>
+          <div class="dt-row"><span class="dt-key">Digesters deployed</span><span class="dt-val g">60,000+ · 3 continents</span></div>
+          <div class="dt-row"><span class="dt-key">Wetlands Intl: flood protection</span><span class="dt-val b">169,000 people</span></div>
+          <div class="dt-row"><span class="dt-key">Wetlands Intl: livelihoods</span><span class="dt-val b">50,000 members</span></div>
+          <div class="dt-row"><span class="dt-key">Mangroves vs tropical forest</span><span class="dt-val g">4× carbon/hectare</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SCENARIO MODELER -->
+<div id="sec-modeler" class="section">
+  <div class="sec-hd">
+    <div class="sec-title-wrap">
+      <div class="sec-eyebrow">§10–12 · Shell Revenue Scenarios</div>
+      <h2>FINANCIAL SCENARIO MODELER</h2>
+    </div>
+  </div>
+
+  <div class="modeler-wrap">
+    <div class="mod-controls">
+      <div class="ctrl-section">
+        <div class="ctrl-label">Scenario Preset <span class="ctrl-val" id="scen-name">Base</span></div>
+        <div class="scen-btns">
+          <button class="sb" data-scen="conservative">Conservative</button>
+          <button class="sb active" data-scen="base">Base</button>
+          <button class="sb" data-scen="aggressive">Aggressive</button>
+        </div>
+      </div>
+      <div class="ctrl-section">
+        <div class="ctrl-label">Carbon Price / tonne <span class="ctrl-val" id="price-val">$40</span></div>
+        <input type="range" id="price-slider" min="25" max="150" value="40">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.52rem;color:var(--t3);margin-top:-0.8rem;margin-bottom:0.8rem"><span>$25 (today)</span><span>$75 (2030)</span><span>$150 (2040)</span></div>
+      </div>
+      <div class="ctrl-section">
+        <div class="ctrl-label">Suppliers Captured (of 50) <span class="ctrl-val" id="suppliers-val">10</span></div>
+        <input type="range" id="suppliers-slider" min="2" max="50" value="10">
+      </div>
+      <div class="ctrl-section">
+        <div class="ctrl-label">Credit Coverage % per Supplier <span class="ctrl-val" id="coverage-val">30%</span></div>
+        <input type="range" id="coverage-slider" min="10" max="80" value="30">
+      </div>
+      <div class="tam-row">
+        <span>2035 TAM Mode (3× industry growth)</span>
+        <label class="tgl"><input type="checkbox" id="tam-toggle"><div class="tgl-track"></div><div class="tgl-thumb"></div></label>
+      </div>
+      <div style="font-family:var(--mono);font-size:0.58rem;color:var(--t3);line-height:1.6;border-top:1px solid var(--border);padding-top:1rem;margin-top:0.5rem">
+        Base: 50 Tier-1 suppliers · 300k tCO₂/yr residual each · $15/t generation cost proxy · 30% community revenue share built in
+      </div>
+    </div>
+
+    <div class="mod-output">
+      <div class="out-grid4">
+        <div class="out-panel">
+          <div class="out-label">Shell Revenue / Year</div>
+          <div class="out-big y" id="out-revenue">$36M</div>
+          <div class="out-sub" id="out-tonnes">900,000 tonnes</div>
+        </div>
+        <div class="out-panel">
+          <div class="out-label">Shell Gross Profit</div>
+          <div class="out-big g" id="out-profit">$22.5M</div>
+          <div class="out-sub" id="out-margin">62.5% margin</div>
+        </div>
+        <div class="out-panel">
+          <div class="out-label">% of $52M NBS Investment Covered</div>
+          <div class="out-big o" id="out-coverage-pct">69%</div>
+          <div class="out-sub">From aerospace segment alone</div>
+        </div>
+        <div class="out-panel">
+          <div class="out-label">Buyer Liability Per Supplier / Yr</div>
+          <div class="out-big r" id="out-buyer-liability">$12M</div>
+          <div class="out-sub" id="out-15yr">15-yr cumulative: $180M</div>
+        </div>
+      </div>
+
+      <!-- Metric explainer -->
+      <div class="metric-explainer">
+        <div class="me-tabs">
+          <span class="me-hint"><span class="me-arrow">→</span> click for descriptions</span>
+          <button class="me-btn" data-metric="revenue" onclick="showMetric('revenue')">Shell Revenue</button>
+          <button class="me-btn" data-metric="profit" onclick="showMetric('profit')">Gross Profit</button>
+          <button class="me-btn" data-metric="coverage" onclick="showMetric('coverage')">NBS Coverage</button>
+          <button class="me-btn" data-metric="liability" onclick="showMetric('liability')">Buyer Liability</button>
+        </div>
+        <div class="me-body" id="me-body" style="display:none">
+          <div class="me-close" onclick="closeMetric()">✕</div>
+          <div class="me-content" id="me-content"></div>
+        </div>
+      </div>
+
+      <div class="insight-box" id="insight-box">
+        <div class="insight-label">Financial Insight</div>
+        <div class="insight-text" id="insight-text">Base scenario at $40/t recovers <strong>69% of Shell's $52M annual NBS investment</strong> from aerospace alone. Aggressive scenario at $14/t breaks even - already below current market price. South Pole capturing same share = <strong>$150M/yr unavailable to Shell</strong>.</div>
+      </div>
+
+      <table class="breakdown" id="breakdown-table">
+        <thead>
+          <tr>
+            <th>Metric</th><th>Value</th><th>Source / Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tip-wrap">Total Volume (tonnes) <span class="tip-icon">?</span><span class="tip">Suppliers captured × each supplier's residual emissions × the coverage percentage Shell contracts to cover. Residual emissions are the floor that cannot be eliminated by electrification or process efficiency alone.</span></td>
+            <td class="bval y" id="bt-vol">0.90M t</td>
+            <td style="color:var(--t3);font-size:0.58rem">Suppliers × residual × coverage%</td>
+          </tr>
+          <tr>
+            <td class="tip-wrap">Shell Sale Price / Tonne <span class="tip-icon">?</span><span class="tip">The price Shell charges buyers per tonne of NBS credits — set by the carbon price slider. Positioned below CBAM certificate costs so the buyer ROI is immediate, while still generating strong margin for Shell.</span></td>
+            <td class="bval y" id="bt-price">$40/t</td>
+            <td style="color:var(--t3);font-size:0.58rem">Set by slider above</td>
+          </tr>
+          <tr>
+            <td class="tip-wrap">Generation Cost / Tonne <span class="tip-icon">?</span><span class="tip">Shell's internal cost to produce one tonne of NBS credits across its portfolio — covering project development, satellite MRV monitoring, Verra certification, and community co-benefit obligations. Fixed regardless of sale price.</span></td>
+            <td class="bval" id="bt-cost">$15/t</td>
+            <td style="color:var(--t3);font-size:0.58rem">Shell NBS portfolio avg</td>
+          </tr>
+          <tr>
+            <td class="tip-wrap">Gross Margin / Tonne <span class="tip-icon">?</span><span class="tip">Sale price minus generation cost. Because generation cost is fixed, every dollar increase in carbon price flows directly to margin. This creates strong operating leverage as the carbon market matures toward 2030.</span></td>
+            <td class="bval g" id="bt-margin-t">$25/t</td>
+            <td style="color:var(--t3);font-size:0.58rem">Margin: <span id="bt-margin-pct" class="bval g" style="font-size:0.65rem">62.5%</span></td>
+          </tr>
+          <tr>
+            <td class="tip-wrap">Community Revenue Share <span class="tip-icon">?</span><span class="tip">A fixed 30% of gross revenue flows to host communities under VCS/Gold Standard project agreements. This is a contractual obligation built into every NBS project — not discretionary. It also supports CCP certification eligibility, which unlocks premium pricing.</span></td>
+            <td class="bval b" id="bt-community">$10.8M</td>
+            <td style="color:var(--t3);font-size:0.58rem">30% of revenue (contractual)</td>
+          </tr>
+          <tr>
+            <td class="tip-wrap">Shell Net After Community <span class="tip-icon">?</span><span class="tip">Gross profit minus the community share. This is what Shell retains on its P&amp;L — the number that directly offsets the NBS cost centre and eventually flips it into a profit centre.</span></td>
+            <td class="bval g" id="bt-net">$11.7M</td>
+            <td style="color:var(--t3);font-size:0.58rem">Gross profit − community</td>
+          </tr>
+          <tr>
+            <td class="tip-wrap">Buyer Savings vs CBAM <span class="tip-icon">?</span><span class="tip">The annual saving a supplier gets by purchasing Shell NBS credits instead of CBAM certificates. CBAM certificates are priced at the EU ETS rate — Shell's credits cover the same compliance obligation at a fraction of that cost, making this the CFO-level hook.</span></td>
+            <td class="bval g" id="bt-saving">$12M/supplier</td>
+            <td style="color:var(--t3);font-size:0.58rem">vs CBAM cert price</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- CBAM vs Margin strip -->
+      <div class="cbam-margin-strip" id="cbam-margin-strip">
+        <div class="cms-panel">
+          <div class="cms-label tip-wrap">Shell Price vs CBAM Certificate <span class="tip-icon">?</span><span class="tip">CBAM certificates must be purchased at the EU ETS price to cover embedded emissions in goods exported to the EU. Shell NBS credits satisfy the same compliance need at a significantly lower price per tonne — the ratio updates as you move the carbon price slider.</span></div>
+          <div class="cms-val g" id="strip-cbam-saving">2–4× cheaper</div>
+          <div class="cms-sub" id="strip-cbam-detail">Shell $40/t vs CBAM ~€80/t · Saves ~$12M per supplier vs certificates</div>
+        </div>
+        <div class="cms-panel" style="border-left:1px solid var(--border)">
+          <div class="cms-label tip-wrap">Gross Margin at Current Inputs <span class="tip-icon">?</span><span class="tip">Sale price minus generation cost, divided by sale price. Because generation cost is fixed, margin expands as carbon prices rise — giving Shell strong upside as the market matures. Even at today's spot floor, the margin is commercially viable.</span></div>
+          <div class="cms-val y" id="strip-margin-pct">62.5%</div>
+          <div class="cms-sub" id="strip-margin-detail">$25/t profit · $15/t cost · Margin floor 40% at $25 spot price</div>
+        </div>
+      </div>
+
+      <!-- Formula panel -->
+      <div class="formula-panel">
+        <div class="formula-toggle" id="formula-toggle" onclick="toggleFormula()">
+          <span>&#x2211; HOW THESE NUMBERS ARE CALCULATED</span>
+          <span class="ftarrow">&#x25BE;</span>
+        </div>
+        <div class="formula-body" id="formula-body">
+          <div class="formula-chain" id="formula-chain">
+            <div class="formula-divider">Inputs</div>
+            <div class="formula-step hl-b">
+              <div class="fs-label">Residual per Supplier</div>
+              <div class="fs-formula">300,000 t · industry floor after 50% abatement</div>
+              <div class="fs-val b">300,000 t</div>
+            </div>
+            <div class="formula-step hl-b">
+              <div class="fs-label">Suppliers Captured</div>
+              <div class="fs-formula">Slider · of 50 Tier-1 universe</div>
+              <div class="fs-val b" id="fml-sups">10</div>
+            </div>
+            <div class="formula-step hl-b">
+              <div class="fs-label">Coverage per Supplier</div>
+              <div class="fs-formula">% of residual Shell covers</div>
+              <div class="fs-val b" id="fml-cov">30%</div>
+            </div>
+            <div class="formula-step hl-b">
+              <div class="fs-label">Carbon Price</div>
+              <div class="fs-formula">Shell sale price/tonne · slider</div>
+              <div class="fs-val b" id="fml-price">$40/t</div>
+            </div>
+
+            <div class="formula-divider">Revenue</div>
+            <div class="formula-step hl-y">
+              <div class="fs-label">Total Tonnes</div>
+              <div class="fs-formula">Suppliers × 300k t × Coverage%</div>
+              <div class="fs-val y" id="fml-tonnes">900,000 t</div>
+            </div>
+            <div class="formula-step hl-y">
+              <div class="fs-label">Gross Revenue</div>
+              <div class="fs-formula">Total tonnes × sale price/t</div>
+              <div class="fs-val y" id="fml-revenue">$36M</div>
+            </div>
+
+            <div class="formula-divider">Profitability</div>
+            <div class="formula-step hl-g">
+              <div class="fs-label">Generation Cost</div>
+              <div class="fs-formula">$15/t fixed · Shell NBS portfolio avg</div>
+              <div class="fs-val" style="color:var(--t2)">$15/t</div>
+            </div>
+            <div class="formula-step hl-g">
+              <div class="fs-label">Gross Profit</div>
+              <div class="fs-formula">Tonnes × (price − $15)</div>
+              <div class="fs-val g" id="fml-profit">$22.5M</div>
+            </div>
+            <div class="formula-step hl-g">
+              <div class="fs-label">Gross Margin %</div>
+              <div class="fs-formula">(price − $15) ÷ price</div>
+              <div class="fs-val g" id="fml-margin">62.5%</div>
+            </div>
+
+            <div class="formula-divider">Community & Net</div>
+            <div class="formula-step hl-b">
+              <div class="fs-label">Community Share</div>
+              <div class="fs-formula">Revenue × 30% · VCS contractual</div>
+              <div class="fs-val b" id="fml-community">$10.8M</div>
+            </div>
+            <div class="formula-step hl-g">
+              <div class="fs-label">Shell Net Retained</div>
+              <div class="fs-formula">Gross profit − community share</div>
+              <div class="fs-val g" id="fml-net">$11.7M</div>
+            </div>
+
+            <div class="formula-divider">NBS Offset & Buyer ROI</div>
+            <div class="formula-step hl-o">
+              <div class="fs-label">NBS Investment Covered</div>
+              <div class="fs-formula">Revenue ÷ $52M Shell NBS annual cost</div>
+              <div class="fs-val o" id="fml-coverage">69%</div>
+            </div>
+            <div class="formula-step hl-r">
+              <div class="fs-label">Buyer Liability / Supplier</div>
+              <div class="fs-formula">300k t × sale price · full residual coverage</div>
+              <div class="fs-val r" id="fml-buyer">$12M/yr</div>
+            </div>
+            <div class="formula-step hl-g">
+              <div class="fs-label">Buyer Savings vs CBAM</div>
+              <div class="fs-formula">300k × (€80 CBAM − sale price)</div>
+              <div class="fs-val g" id="fml-saving">$12M/supplier</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Margin sensitivity quick ref -->
+  <div style="margin-top:1.2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden">
+    <div class="tip-wrap" style="background:var(--s1);padding:1.1rem 1.3rem;cursor:help">
+      <div class="out-label">Conservative: $10 Cost · $25 Sale</div>
+      <div class="out-big b">40%</div>
+      <div class="out-sub">$10/t margin · VCM spot floor scenario</div>
+      <span class="tip">At $25/t carbon price (current VCM spot minimum), Shell still earns $10/t over the $15 gen cost. This is the absolute floor — any higher price improves margin linearly.</span>
+    </div>
+    <div class="tip-wrap" style="background:var(--s1);padding:1.1rem 1.3rem;cursor:help">
+      <div class="out-label">Base: $15 Cost · $40 Sale</div>
+      <div class="out-big y">62.5%</div>
+      <div class="out-sub">$25/t margin · modelled base case</div>
+      <span class="tip">Base case assumption. $40/t aligns with current CCP-eligible premium pricing and is below CBAM (€80/t). Recovers 69% of Shell's $52M NBS investment from aerospace alone.</span>
+    </div>
+    <div class="tip-wrap" style="background:var(--s1);padding:1.1rem 1.3rem;cursor:help">
+      <div class="out-label">Aggressive: $10 Cost · $75 Sale</div>
+      <div class="out-big g">80%</div>
+      <div class="out-sub">$65/t margin · 2030 carbon price forecast</div>
+      <span class="tip">$75/t = 2030 carbon price trajectory. At this level, Shell earns $65/t over gen cost. Still 6× cheaper than projected 2030 CBAM (€120/t). Aerospace segment alone covers entire $52M NBS investment and generates surplus profit.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ RESEARCH CARDS -->
+<div id="sec-cards" class="section">
+  <div class="sec-hd">
+    <div class="sec-title-wrap">
+      <div class="sec-eyebrow">Research Intelligence Cards</div>
+      <h2>FINANCIAL PAIN POINTS & SIGNALS</h2>
+    </div>
+  </div>
+  <div class="filter-bar" id="card-filters">
+    <button class="fb fa" data-f="all">All</button>
+    <button class="fb" data-f="critical" data-active="fr">🔴 Critical</button>
+    <button class="fb" data-f="high" data-active="fo">🟠 High</button>
+    <button class="fb" data-f="opportunity" data-active="fg">🟢 Opportunity</button>
+    <button class="fb" data-f="regulatory" data-active="fb2">🔵 Regulatory</button>
+    <button class="fb" data-f="Shell Financials">Shell Financials</button>
+    <button class="fb" data-f="NBS Market">NBS Market</button>
+    <button class="fb" data-f="Aerospace">Aerospace</button>
+    <button class="fb" data-f="SpaceX">SpaceX</button>
+    <button class="fb" data-f="Compliance">Compliance</button>
+  </div>
+  <div class="card-hint">Click any card to expand data signals and solution levers</div>
+  <div class="cards-grid" id="cards-grid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ NUMBERS BROWSER -->
+<div id="sec-numbers" class="section">
+  <div class="sec-hd">
+    <div class="sec-title-wrap">
+      <div class="sec-eyebrow">Master Numbers Reference - All 22 Sections</div>
+      <h2>SEARCH STATISTICS</h2>
+    </div>
+  </div>
+  <div class="nums-controls">
+    <input class="search-inp" type="text" id="num-search" placeholder="Search numbers, labels, categories...">
+    <select class="cat-sel" id="num-cat">
+      <option value="all">All Categories</option>
+      <option value="Shell Financials">Shell Financials</option>
+      <option value="NCI & Emissions">NCI & Emissions</option>
+      <option value="NBS Investment">NBS Investment</option>
+      <option value="NBS Projects">NBS Projects</option>
+      <option value="Credit Pricing">Credit Pricing</option>
+      <option value="Market Size">Market Size</option>
+      <option value="Carbon Prices">Carbon Prices</option>
+      <option value="CBAM">CBAM</option>
+      <option value="Aerospace Emissions">Aerospace Emissions</option>
+      <option value="TAM">TAM</option>
+      <option value="Revenue Scenarios">Revenue Scenarios</option>
+      <option value="Margin Model">Margin Model</option>
+      <option value="Buyer Liability">Buyer Liability</option>
+      <option value="SpaceX">SpaceX</option>
+      <option value="SLL">SLL</option>
+      <option value="Mangroves">Mangroves</option>
+      <option value="KSC Risk">KSC Risk</option>
+      <option value="Space Industry">Space Industry</option>
+      <option value="Community">Community</option>
+      <option value="Competitive">Competitive</option>
+      <option value="VCM Structure">VCM Structure</option>
+    </select>
+    <label class="pitch-tog" id="pitch-toggle">
+      <span>⭐ Pitch-Critical Only</span>
+    </label>
+    <div class="num-count" id="num-count">- numbers</div>
+  </div>
+  <div class="nums-grid" id="nums-grid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ STRATEGY MATRIX -->
+<div id="sec-matrix" class="section">
+  <div class="sec-hd">
+    <div class="sec-title-wrap">
+      <div class="sec-eyebrow">Strategic Opportunity Analysis</div>
+      <h2>IMPACT vs FEASIBILITY MATRIX</h2>
+    </div>
+  </div>
+  <div class="matrix-layout">
+    <div class="matrix-wrap">
+      <div class="matrix-title">Shell NBS Strategy Options</div>
+      <div class="matrix-sub">Impact on NCI/Revenue vs Feasibility for Shell (given existing assets, relationships, constraints)</div>
+      <div class="m-grid">
+        <div class="m-y-axis"><span>Impact on NCI / Net Zero</span></div>
+        <div class="m-cell m-tl">
+          <div class="m-label">High Impact · Low Feasibility</div>
+          <div class="m-item">Replace full NBS portfolio with DAC/BECCS removal credits (>$500/t)</div>
+          <div class="m-item">Achieve "carbon neutral LNG" without greenwashing exposure (pre-CCP era)</div>
+        </div>
+        <div class="m-cell m-tr">
+          <div class="m-label">High Impact · High Feasibility ← FOCUS</div>
+          <div class="m-item">Carbon-Neutral Aerospace Aluminum - Shell Certified (CBAM line item)</div>
+          <div class="m-item">Forward carbon contracts: lock $25–40/t before $75–150 by 2030–40</div>
+          <div class="m-item">ESG Aggregator: CBAM filings + EcoVadis scorecard + Scope 3 data</div>
+          <div class="m-item">CCP-label upgrade: $4.15→$14.80 avg = 3.5× revenue uplift potential</div>
+        </div>
+        <div class="m-cell m-bl">
+          <div class="m-label">Low Impact · Low Feasibility</div>
+          <div class="m-item">Tokenising credits on public blockchain (regulatory/audit blockers)</div>
+          <div class="m-item">Solo REDD+ reforestation in post-Verra scandal markets</div>
+        </div>
+        <div class="m-cell m-br">
+          <div class="m-label">Low Impact · High Feasibility</div>
+          <div class="m-item">EV charging network with credit incentives (margin too thin)</div>
+          <div class="m-item">Internal carbon price for capex steering (useful, not revenue-generating)</div>
+          <div class="m-item">Shell Foundation credits for emerging market ESG optics</div>
+        </div>
+        <div class="m-x-axis">Feasibility for Shell →</div>
+      </div>
+    </div>
+
+    <div class="matrix-wrap">
+      <div class="matrix-title">Aerospace Buyer Strategy</div>
+      <div class="matrix-sub">Impact on cost reduction / compliance vs ease of adoption for aerospace Tier-1 suppliers</div>
+      <div class="m-grid">
+        <div class="m-y-axis"><span>Impact on Buyer Compliance / Savings</span></div>
+        <div class="m-cell m-tl">
+          <div class="m-label">High Impact · Hard to Adopt</div>
+          <div class="m-item">Full electrification of titanium smelting (decades away)</div>
+          <div class="m-item">Switching aluminum supplier geographies mid-supply chain</div>
+        </div>
+        <div class="m-cell m-tr">
+          <div class="m-label">High Impact · Easy to Adopt ← SHELL'S LANE</div>
+          <div class="m-item">Single line item: carbon-neutral material + CBAM docs bundled</div>
+          <div class="m-item">SLL qualification: verified credits reduce borrowing costs ($463B market)</div>
+          <div class="m-item">EcoVadis scorecard automation (5,000→10,000 mandated by primes)</div>
+          <div class="m-item">15-yr cost hedge: lock $25 vs $150 projected spot - $37.5M/yr savings</div>
+        </div>
+        <div class="m-cell m-bl">
+          <div class="m-label">Low Impact · Hard to Adopt</div>
+          <div class="m-item">Consumer-facing carbon neutral branding (Verra backlash risk)</div>
+          <div class="m-item">Internal carbon accounting only - no regulatory recognition</div>
+        </div>
+        <div class="m-cell m-br">
+          <div class="m-label">Low Impact · Easy to Adopt</div>
+          <div class="m-item">Buy cheap REDD+ credits at $2.70/t - CCC-rated, high risk</div>
+          <div class="m-item">Annual ESG reporting only with no verified instrument</div>
+        </div>
+        <div class="m-x-axis">Ease of Adoption for Suppliers →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Win-Win-Win Table -->
+  <div class="full-table-wrap">
+    <div class="dt-head"><div class="dt-title">THREE-WAY VALUE CREATION</div><div class="dt-badge">Financial Case Per Stakeholder</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
+      <div style="background:var(--s1);padding:1.2rem 1.4rem">
+        <div style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--y);margin-bottom:0.7rem">🐚 Shell Wins</div>
+        <div class="expand-list"><ul>
+          <li>NBS flips from $52M/yr loss → $22.5–$281M/yr profit (base–aggressive)</li>
+          <li>3 recurring revenue streams: forward contracts + ESG platform + certification royalties</li>
+          <li>3.5× revenue uplift via CCP labelling ($4.15→$14.80/t avg)</li>
+          <li>Aerospace covers 69% NBS investment at base case - from one segment</li>
+          <li>12–24 month switching costs lock in clients once onboarded</li>
+          <li>AeroShell existing spec-level relationships (Boeing BMS 3-33, Airbus, Lockheed) = zero cold-start</li>
+        </ul></div>
+      </div>
+      <div style="background:var(--s1);padding:1.2rem 1.4rem">
+        <div style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--g);margin-bottom:0.7rem">🏭 Aerospace Suppliers Win</div>
+        <div class="expand-list"><ul>
+          <li>Eliminate $112M–$675M 15-yr liability per supplier at locked $25/t</li>
+          <li>CBAM compliance 2–4× cheaper than certificates (€70–84/t vs $25–40/t NBS)</li>
+          <li>SLL interest rate step-down - verified credits qualify ($463B market)</li>
+          <li>EcoVadis scorecard automation protects $B+ prime contracts</li>
+          <li>Annual savings at 2030: $15M/supplier ($75 spot vs $25 locked)</li>
+          <li>Annual savings at 2040: $37.5M/supplier ($150 spot vs $25 locked)</li>
+        </ul></div>
+      </div>
+      <div style="background:var(--s1);padding:1.2rem 1.4rem">
+        <div style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--b);margin-bottom:0.7rem">🌍 Communities Win</div>
+        <div class="expand-list"><ul>
+          <li>Kenya/Nigeria Acts: 25–40% revenue mandated to local communities</li>
+          <li>Kasigau: 400+ jobs, 15 schools, 25k people clean water, 2,300 scholarships</li>
+          <li>Senegal mangroves: €3B labour income over 10 years, 169k flood-protected</li>
+          <li>Sistema.bio: +$580/yr farm income × 60,000+ households</li>
+          <li>Mangroves: $65B+ annual flood damage avoided globally</li>
+          <li>$855B NPV global mangrove protection value</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TIMELINE -->
+<div id="sec-timeline" class="section">
+  <div class="sec-hd">
+    <div class="sec-title-wrap">
+      <div class="sec-eyebrow">§6 · §17 · §20 · Competitive Window</div>
+      <h2>TIMELINE & COMPETITIVE WINDOW</h2>
+    </div>
+  </div>
+
+  <div class="window-alert">
+    <div class="wa-icon">⚠️</div>
+    <div class="wa-text"><strong>12–18 month first-mover window</strong> before competitive advantage closes. South Pole February 2026 buyer guide confirms market entering pivotal phase. At 25% aerospace TAM capture ($40/t): <strong>$150M/yr in revenue unavailable to Shell</strong>. Switching costs once a supplier is integrated: 12–24 months re-verification to change providers.</div>
+  </div>
+
+  <div class="timeline-grid">
+    <div class="tl-col">
+      <div class="tl-year y">2025–26</div>
+      <div class="tl-subtitle">Regulatory Trigger Moment</div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--r)"></div><div class="tl-text"><strong>Jan 1 2026:</strong> CBAM definitive phase - aluminum/steel/cement. First financial obligations active.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--r)"></div><div class="tl-text"><strong>China ETS expands</strong> to steel, cement, aluminum early 2026. India CCTS mandatory Jan 2026.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--y)"></div><div class="tl-text"><strong>SpaceX IPO 2026:</strong> $1.5T valuation. Morgan Stanley + Goldman Sachs leading. ESG investor scrutiny unlocked.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--y)"></div><div class="tl-text"><strong>12–18 month window</strong> before South Pole, 3Degrees capture aerospace buyers. Act now or lose first-mover.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--g)"></div><div class="tl-text">EcoVadis scorecards: 5,000 generated, target 10,000. Compliance cascade active from Lockheed, Boeing, RTX, Airbus.</div></div>
+      <div class="tl-price-track">
+        <div class="tl-price-label">Carbon Price Now</div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--y)">EU ETS</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--y);width:56%"></div></div><span class="pbr-val" style="color:var(--y)">€84/t</span></div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--g)">NBS</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--g);width:27%"></div></div><span class="pbr-val" style="color:var(--g)">$40/t</span></div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--r)">Shell buy</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--r);width:3%"></div></div><span class="pbr-val" style="color:var(--r)">$4.15/t</span></div>
+      </div>
+    </div>
+    <div class="tl-col">
+      <div class="tl-year o">2027–30</div>
+      <div class="tl-subtitle">Price Escalation Phase</div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--r)"></div><div class="tl-text"><strong>CBAM Sept 2027:</strong> first declarations due. Airlines, manufacturers pay real money.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--o)"></div><div class="tl-text"><strong>EU ETS consensus 2030:</strong> €126/t. Current Shell forward contracts at $25–40/t = 3–5× cheaper.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--o)"></div><div class="tl-text"><strong>BNEF scenario 2030:</strong> $42–146/t voluntary market. IMF/World Bank: $75/t floor for developed nations.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--y)"></div><div class="tl-text">Northrop net-zero ops target 2035. Boeing/RTX/Lockheed SBTi commitments cascade to suppliers.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--g)"></div><div class="tl-text">Shell locked $25/t buyers save <strong>$15M/yr/supplier vs $75 spot.</strong> Switching costs now 12–24 months.</div></div>
+      <div class="tl-price-track">
+        <div class="tl-price-label">Carbon Price Trajectory 2030</div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--r)">EU ETS</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--r);width:84%"></div></div><span class="pbr-val" style="color:var(--r)">€126/t</span></div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--o)">BNEF</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--o);width:50%"></div></div><span class="pbr-val" style="color:var(--o)">$75/t</span></div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--g)">Shell</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--g);width:27%"></div></div><span class="pbr-val" style="color:var(--g)">$40/t</span></div>
+      </div>
+    </div>
+    <div class="tl-col">
+      <div class="tl-year g">2030–35</div>
+      <div class="tl-subtitle">TAM Expansion Phase</div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--g)"></div><div class="tl-text"><strong>Space industry $1.8T:</strong> 9% CAGR from $630B. TAM expands from 15M → 45M tCO₂/yr residual.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--g)"></div><div class="tl-text">Shell 25% capture at $40/t and 2035 TAM = <strong>$450M/yr revenue</strong> from aerospace alone.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--g)"></div><div class="tl-text">Shell 25% capture at $75/t and expanded TAM = <strong>$1.125B/yr revenue.</strong></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--y)"></div><div class="tl-text">Morgan Stanley upside: $2.3T if Starship full reusability by 2027. 180 annual launches (McKinsey).</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--b)"></div><div class="tl-text">VCM market: $47.5B by 2035 at 38% CAGR (Roots Analysis). High-quality demand 7× by 2030.</div></div>
+      <div class="tl-price-track">
+        <div class="tl-price-label">Carbon Price Trajectory 2035</div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--o)">EY NZC</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--o);width:83%"></div></div><span class="pbr-val" style="color:var(--o)">$125/t</span></div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--g)">Shell</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--g);width:27%"></div></div><span class="pbr-val" style="color:var(--g)">$40/t</span></div>
+      </div>
+    </div>
+    <div class="tl-col">
+      <div class="tl-year b">2040+</div>
+      <div class="tl-subtitle">Infrastructure Dominance</div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--b)"></div><div class="tl-text"><strong>BNEF 2040 scenario:</strong> $150/t voluntary. Shell locked clients save $37.5M/yr vs spot per supplier.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--b)"></div><div class="tl-text">BNEF 2050: $172/t. VCM market $884B/yr. Demand 5.9B credits/yr. Shell as embedded infra = durable moat.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--p)"></div><div class="tl-text">Historical analogy: Microsoft/Google/Amazon signed renewable PPAs 2012–14. By 2023, >80% hyperscalers at 100% renewable. Shell's aerospace play replicates first-mover dynamic.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--g)"></div><div class="tl-text">Buyer 15-yr cumulative liability at $150/t: <strong>$675M per Tier-1 supplier</strong> vs locked $112.5M at $25/t.</div></div>
+      <div class="tl-price-track">
+        <div class="tl-price-label">Carbon Price Trajectory 2050</div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--r)">BNEF</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--r);width:100%"></div></div><span class="pbr-val" style="color:var(--r)">$172/t</span></div>
+        <div class="price-bar-row"><span class="pbr-label" style="color:var(--g)">Shell</span><div class="pbr-track"><div class="pbr-fill" style="background:var(--g);width:27%"></div></div><span class="pbr-val" style="color:var(--g)">locked</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VCM & Market Context -->
+  <div class="overview-grid">
+    <div class="data-table-wrap">
+      <div class="dt-head"><div class="dt-title">VCM MARKET PROJECTIONS</div><div class="dt-badge">§5 · Growth Runway</div></div>
+      <div class="dt-body">
+        <div class="dt-row"><span class="dt-key">VCM 2024 value</span><span class="dt-val b">$1.4B</span></div>
+        <div class="dt-row"><span class="dt-key">VCM 2025 spending</span><span class="dt-val b">~$1.04B (Sylvera)</span></div>
+        <div class="dt-row"><span class="dt-key">VCM 2030 (MSCI low)</span><span class="dt-val y">$7–35B</span></div>
+        <div class="dt-row"><span class="dt-key">VCM 2035 (Roots)</span><span class="dt-val y">$47.5B at 38% CAGR</span></div>
+        <div class="dt-row"><span class="dt-key">VCM 2037 projected</span><span class="dt-val g">$950B</span></div>
+        <div class="dt-row"><span class="dt-key">VCM 2050 (BNEF removal)</span><span class="dt-val g">$884B/yr</span></div>
+        <div class="dt-row"><span class="dt-key">Growth runway</span><span class="dt-val g">1,700× from 2024</span></div>
+        <div class="dt-row"><span class="dt-key">CAGR 2024–2030</span><span class="dt-val g">34.6%</span></div>
+        <div class="dt-row"><span class="dt-key">Active corporate buyers</span><span class="dt-val b">6,500 companies</span></div>
+        <div class="dt-row"><span class="dt-key">Fortune 500 committed</span><span class="dt-val b">42%</span></div>
+        <div class="dt-row"><span class="dt-key">Industrial VCM CAGR</span><span class="dt-val g">17.6%</span></div>
+        <div class="dt-row"><span class="dt-key">High-quality demand 7× by 2030</span><span class="dt-val y">South Pole 2026 guide</span></div>
+      </div>
+    </div>
+    <div class="data-table-wrap">
+      <div class="dt-head"><div class="dt-title">MANGROVE & KSC RISK</div><div class="dt-badge">§15–16 · Physical Risk</div></div>
+      <div class="dt-body">
+        <div class="dt-row"><span class="dt-key">Global mangrove avoided damages/yr</span><span class="dt-val g">$65–82B</span></div>
+        <div class="dt-row"><span class="dt-key">Global mangrove NPV</span><span class="dt-val g">$855B</span></div>
+        <div class="dt-row"><span class="dt-key">Hurricane Irma mangrove saving</span><span class="dt-val g">$1.5B · 626k people</span></div>
+        <div class="dt-row"><span class="dt-key">Hurricane Ian damage reduction</span><span class="dt-val g">~$4.1B</span></div>
+        <div class="dt-row"><span class="dt-key">One Florida county/yr avoided loss</span><span class="dt-val g">$67.5M</span></div>
+        <div class="dt-row"><span class="dt-key">KSC shoreline in retreat</span><span class="dt-val r">88%</span></div>
+        <div class="dt-row"><span class="dt-key">Complex 39A flood risk today</span><span class="dt-val r">14% annual</span></div>
+        <div class="dt-row"><span class="dt-key">Complex 39A annual inundation by</span><span class="dt-val r">2060</span></div>
+        <div class="dt-row"><span class="dt-key">Starbase tower elevation</span><span class="dt-val r">9 feet ASL</span></div>
+        <div class="dt-row"><span class="dt-key">Single launch delay cost</span><span class="dt-val r">$4M/day (court filing)</span></div>
+        <div class="dt-row"><span class="dt-key">Projected infra damage mid-century</span><span class="dt-val r">$7.3B/yr</span></div>
+        <div class="dt-row"><span class="dt-key">Mangroves vs forest sequestration</span><span class="dt-val g">4× per hectare</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="dash-footer">
+  <span id="footer-short">Sources: Shell Annual Reports 2023-24, MSCI Carbon 2025, BloombergNEF, South Pole Buyer Guide 2026, McKinsey Space Economy, FAA EIS, NASA NTRS, Ecosystem Marketplace &nbsp;<button onclick="document.getElementById('footer-short').style.display='none';document.getElementById('footer-full').style.display='block'" style="font-family:var(--mono);font-size:0.52rem;color:var(--y);background:none;border:none;cursor:pointer;letter-spacing:0.06em">+ show all</button></span>
+  <span id="footer-full" style="display:none">Shell Annual Report 2024 · Shell Capital Markets Day 2025 · AlliedOffsets VCM 2024 · MSCI Carbon 2025 · ICVCM CCP Standards · BloombergNEF · McKinsey Space Economy Report · FAA EIS Starship · NASA NTRS · Northrop Grumman Sustainability Report 2024 · South Pole Buyer Guide 2026 · Ecosystem Marketplace · Nature/Scientific Reports &nbsp;<button onclick="document.getElementById('footer-full').style.display='none';document.getElementById('footer-short').style.display='block'" style="font-family:var(--mono);font-size:0.52rem;color:var(--t2);background:none;border:none;cursor:pointer;letter-spacing:0.06em">- collapse</button></span>
+</div>
+
+<script>
+// ── CARDS DATA ──────────────────────────────────────────────────────────────
+const CARDS_DATA = [
+  {cat:"Shell Financials",level:"critical",clr:"#ff3d55",title:"NCI Target Under-Delivery: Executive Pay at Risk",
+   desc:"Shell's NCI hit ~71 gCO₂e/MJ in 2024 - still far from 15–20% 2030 target. NCI is embedded in LTIP (25%) and PSP (12.5%) for senior management. A miss = direct hit on hundreds of millions in long-term compensation. Scope 3 (1,147 Mt) is the root cause - Shell's entire strategy hinges on solving it.",
+   kpis:[{l:"Urgency",v:95},{l:"Exec Financial Risk",v:88},{l:"NCI Gap Severity",v:82}],
+   signals:["NCI reduced only 10pts since 2016 baseline - 15–20% target requires accelerating","2035 45% target formally scrapped. 2030 target downgraded from 20% in March 2024","NCI miss = LTIP/PSP compensation miss for entire senior leadership"],
+   levers:["Aerospace NBS platform contributes verified Scope 3 credit retirements to NCI formula","CCP-labelled credits count more reliably in NCI - $4.15→$14.80 avg = quality upgrade","Deploy aerospace forward contracts as structured NCI instruments, not reactive Q4 buys"]},
+  {cat:"Shell Financials",level:"critical",clr:"#ff3d55",title:"RES Segment: $4.4B in Impairments, Still Loss-Making",
+   desc:"Shell's Renewables & Energy Solutions segment posted $2.2–2.4B net expense in 2024, with $996M in Q4 North American renewables impairment. Carbon credits sit inside RES with no standalone P&L, masking both the cost centre and the upside. The NBS business was operationally loss-making in 2023–24.",
+   kpis:[{l:"P&L Impact",v:90},{l:"Portfolio Risk",v:85},{l:"Revenue Gap",v:80}],
+   signals:["$4.4B total low-carbon impairment - largest single-year write-down in Shell history","NBS buy price $4.15/t vs $14.80 for high-rated credits - buying at near CCC–B floor","Shell #1 global credit buyer 2 years running - but no visible revenue from this position"],
+   levers:["Carve out standalone Carbon Solutions P&L - investor clarity + internal accountability","Reposition from cost centre to margin business: sell aerospace NBS at $25–40/t vs $4.15 buy cost","3.5× revenue uplift possible via CCP labelling path - $14.80 vs $4.15 avg"]},
+  {cat:"Shell Financials",level:"critical",clr:"#ff3d55",title:"Reserve Life Collapse: <8 Years - Strategic Urgency",
+   desc:"Shell's total proved reserves dropped to 8.1 billion boe - lowest since 2013. Reserve life <8 years vs industry average 12+ at ExxonMobil and TotalEnergies. This makes the NBS-as-infrastructure play a strategic necessity, not an ESG checkbox - Shell must develop durable, recurring revenue streams that don't depend on hydrocarbon inventory.",
+   kpis:[{l:"Strategic Urgency",v:85},{l:"Competitive Gap",v:78},{l:"Diversification Need",v:90}],
+   signals:["Reserve life 33% below ExxonMobil/TotalEnergies industry average","17 consecutive $3B+ buyback quarters - distributing 52% of cash flow to shareholders","Q4 2025 earnings $3.26B - weakest in 5 years, 40% YoY decline"],
+   levers:["Aerospace NBS platform = capital-light, recurring revenue not dependent on hydrocarbon reserves","Forward contract pipeline creates multi-year backlog - predictable cash flow","AeroShell existing relationships (Boeing BMS 3-33, Airbus, Lockheed) = zero acquisition cost customer base"]},
+  {cat:"NBS Market",level:"critical",clr:"#ff3d55",title:"Credit Quality Crisis: $4.15 avg = Near CCC–B Floor",
+   desc:"43% of all VCM retirements in 2024 came from low-rated CCC–B projects. Shell paid $4.15/t avg - sitting just above the $3.50 CCC–B floor. High-rated (A–AAA) credits trade at $14.80/t - a 4.2× gap. ICVCM has rejected all legacy renewable energy credit methodologies under CCP standards. Shell's portfolio has hidden compliance risk.",
+   kpis:[{l:"Portfolio Quality Risk",v:85},{l:"Compliance Gap",v:80},{l:"Revenue Upside",v:88}],
+   signals:["Only 4% of all issued credits carry CCP label - Shell has upgrade pathway with almost no competition","REDD+ credits post-Verra 2023 scandal: 62% value destruction, 7× price drop in one month","Share of A-rated or higher credits grew 1.5× in 2 years - Shell can ride this if it moves now"],
+   levers:["AI Permanence Risk Index: dynamic satellite-monitored scoring per credit lifts pricing toward CCP tier","CCP labelling path = $4.15 buy cost → $14.80 sellable price - 3.5× revenue on same underlying asset","Aerospace forward contracts priced at $25–40/t already sit in premium-quality territory"]},
+  {cat:"NBS Market",level:"high",clr:"#ff8c00",title:"Market Structure: Quality vs Price Split Deepening",
+   desc:"The VCM is splitting into two markets: a glut of cheap legacy credits ($3.50–$5.80/t) and a supply crunch for high-integrity removal credits ($20–40/t). Article 6 passage at COP29 further tightens supply of internationally recognised credits. Shell is positioned in the cheap tier - a structural risk as compliance demand escalates.",
+   kpis:[{l:"Market Distortion",v:75},{l:"Supply Risk Quality",v:88},{l:"Article 6 Urgency",v:82}],
+   signals:["VCM spending down 25% by volume in 2024 vs 2023, but high-quality prices rising","CORSIA-eligible credits ~€19/t - aviation compliance demand creating separate price tier","NBS offtake agreements in 2024 averaged $20+/t - above Shell's buy price already"],
+   levers:["Use Shell trading desk to become market-maker in CCP-eligible aerospace-grade credits","Long-term forward contracts lock supply before Article 6 compliance demand arrives","Develop proprietary credits through existing NBS project base at higher certification tier"]},
+  {cat:"Compliance",level:"high",clr:"#ff8c00",title:"CBAM: €4.16M/yr Per Aerospace Manufacturer - Shell 2–4× Cheaper",
+   desc:"CBAM's definitive phase began January 1, 2026. A manufacturer importing 20,000t aerospace-grade aluminum faces €4.16M/yr at €80/t - rising to €6.24M/yr by 2030 at €126/t consensus. Shell NBS covers the same embedded carbon at $1.3–2.08M/yr. This is a pure cost arbitrage product - not sustainability optics.",
+   kpis:[{l:"Buyer Pain",v:90},{l:"Shell Price Advantage",v:85},{l:"Addressable Market",v:88}],
+   signals:["Every major aerospace prime in CSRD scope: Boeing, Lockheed, Northrop, RTX, Airbus","California Cap-and-Trade: Lockheed, Northrop, Raytheon, SpaceX all at or above 25,000 tCO₂/yr threshold","CBAM first declaration due Sept 2027 - manufacturers need instruments NOW to lock in coverage"],
+   levers:["Position Shell NBS as the CBAM compliance instrument - 1 contract covers 3 obligations","Bundle CBAM documentation, CSRD data, and EcoVadis scorecard into single Shell integration","Pre-sign 5-year CBAM coverage contracts at $25–40/t before 2027 declaration crunch"]},
+  {cat:"Aerospace",level:"high",clr:"#ff8c00",title:"Titanium Buy-to-Fly: 550 kgCO₂ per kg Flown - Highest-Leverage Material",
+   desc:"Titanium carries 55 kgCO₂/kg from Kroll process smelting. With 90% buy-to-fly waste - meaning 10kg must be machined to fly 1kg - the effective footprint is 550 kgCO₂ per kg actually flown. This is the single highest-leverage material for carbon credit attachment. One Tier-1 supplier's titanium use alone = 160,000 tCO₂/yr.",
+   kpis:[{l:"Carbon Intensity",v:95},{l:"NBS Addressability",v:82},{l:"Buyer Motivation",v:78}],
+   signals:["Representative Tier-1 total: 600k tCO₂/yr (Al 280k + Ti 160k + composites 100k + facility 60k)","Aircraft manufacturing sector 18.1 MtCO₂e/yr - aluminum alone = 56% of that","90%+ of spacecraft lifecycle energy embedded in materials before factory door"],
+   levers:["Shell certifies material at smelter/mill exit - CBAM docs bundled, Scope 3 data transferred","'Carbon-Neutral Aerospace Titanium - Shell Certified' as named product with per-kg footprint","ERP lock-in: CBAM filing, EcoVadis scorecard, all reference Shell cert ID - switching costs 12–24 months"]},
+  {cat:"SpaceX",level:"high",clr:"#ff8c00",title:"SpaceX IPO: $1.5T Valuation - ESG Investor Scrutiny Unlocked",
+   desc:"SpaceX's 2026 IPO at ~$1.5T is led by Morgan Stanley and Goldman Sachs. Fidelity and Alphabet (Google) hold significant stakes - all with aggressive net-zero commitments. Post-IPO, SpaceX's supply chain will face the same ESG scrutiny as any other public company's. Shell's window is pre-IPO voluntary → post-IPO mandatory.",
+   kpis:[{l:"Window Urgency",v:92},{l:"Investor ESG Pressure",v:85},{l:"Supply Chain Leverage",v:88}],
+   signals:["SpaceX: 3,000+ suppliers · 1,100 weekly deliveries · 85% in-house manufacturing","Falcon 9 revenue ~$67M/launch · 93 orbital flights Cape Canaveral 2024 · 35% YoY growth","Single Starbase launch delay: $4M/day per court filings - climate = operational risk narrative"],
+   levers:["Suppliers certified 'for SpaceX supply chain' - brand anchor without SpaceX as direct buyer","Orbital Decarbonisation Bundle: multi-year NBS + preferential Shell LNG/green hydrogen pricing","Satellite-to-Forest verification loop: SpaceX Starlink monitors forests generating credits their chain buys"]},
+  {cat:"Compliance",level:"opportunity",clr:"#00e5a0",title:"SLL Market: $463B - Carbon Credits as Interest Rate Reduction Instrument",
+   desc:"The sustainability-linked loan market is $463B - 10% of all loan issuances. Carbon emissions is the most common KPI. A Standard Chartered precedent confirms verified credit purchasing as an accepted SLL qualifying metric. For aerospace suppliers, Shell's carbon certificates could trigger interest rate step-downs on existing debt facilities.",
+   kpis:[{l:"Market Size",v:88},{l:"Buyer Incentive",v:85},{l:"Shell Differentiation",v:80}],
+   signals:["$463B outstanding SLLs - Shell can position credits as financial instruments, not just offsets","Step-down = interest rate reduction when sustainability KPIs hit. Step-up = cost if missed.","77.4% S&P 500 incorporate ESG in exec comp. 80.2% energy companies - highest sector."],
+   levers:["Co-market Shell NBS certificates as SLL-qualifying instruments with Standard Chartered / HSBC","Financial case: $1M saved in CBAM + interest rate step-down = irrefutable CFO-level ROI","Build into Shell ESG Aggregator: one dashboard shows CBAM compliance + SLL KPI progress"]},
+  {cat:"NBS Market",level:"opportunity",clr:"#00e5a0",title:"CCP Labelling Path: 3.5× Revenue on Same Underlying Asset",
+   desc:"Only 4% of all issued credits globally carry the CCP (Core Carbon Principles) label as of late 2024. Shell's portfolio, currently bought at $4.15/t avg, could qualify for CCP labelling given the quality of Kasigau Corridor and other assets - unlocking $14.80/t sale prices. The uplift potential covers Shell's entire $52M NBS investment from credit quality alone.",
+   kpis:[{l:"Revenue Uplift",v:92},{l:"Portfolio Readiness",v:72},{l:"Market Timing",v:88}],
+   signals:["4.2× price gap between A-rated ($14.80) and CCC-rated ($3.50) - Shell sits near bottom","Kasigau Corridor: 13.9M tCO₂e cumulative, 400+ jobs, 1.8M credits/yr - strong CCP candidate","CCP-labelled share grew 1.5× in 2 years - early movers get the premium before market normalises"],
+   levers:["AI Permanence Risk Index: satellite-monitored risk score per project lifts to CCP-eligible pricing","Target CCP certification for Kasigau, Cordillera Azul, Senegal mangrove as priority assets","Market $14.80/t product as 'Aerospace Grade Carbon Certificate' - quality positioning vs commodity"]},
+  {cat:"Aerospace",level:"opportunity",clr:"#00e5a0",title:"Select Carbon Australia: $11M–$165M/yr Latent Revenue",
+   desc:"Shell's 9M+ hectare Australian portfolio has gross issuance potential of 4.5–27M tCO₂e/yr. After 30–40% creditability adjustment: 1.4–11M sellable credits/yr at $8–15/t = $11–165M annual revenue. IoT-enhanced monitoring adds 0.5 tCO₂e/hectare uplift = 4.5M additional credits × $10/t = $45M additional annually.",
+   kpis:[{l:"Revenue Potential",v:82},{l:"Asset Scale",v:88},{l:"IoT Upside",v:75}],
+   signals:["9M hectares = largest single NBS asset in Shell portfolio by land area","Dryland carbon farming sequestration: 0.5–3 tCO₂e/hectare (conservative is achievable)","IoT monitoring upgrade converts survival rate improvement directly into additional sellable credits"],
+   levers:["Deploy IoT + satellite monitoring across 9M hectares - each 0.5t uplift = 4.5M credits","Price at $10/t (conservative) = $45M additional revenue from monitoring upgrade alone","Register as CCP-eligible REDD+ alternative under Australian safeguard mechanism standards"]},
+  {cat:"SpaceX",level:"opportunity",clr:"#00e5a0",title:"Mangrove Coastal Resilience: $720M Launch Delay Risk = Shell's 'Social License' Product",
+   desc:"A 6-month FAA/NEPA environmental delay at $4M/day = $720M in direct SpaceX losses. KSC Complex 39A faces 14% annual flood risk today, rising to annual inundation by 2060. Starbase tower base sits at 9 feet ASL. Shell's Senegal mangrove project directly addresses the physical risk SpaceX's investors will price at IPO.",
+   kpis:[{l:"Risk Magnitude",v:88},{l:"Solution Relevance",v:80},{l:"IPO Narrative Value",v:85}],
+   signals:["88% of KSC shoreline in retreat. Tropical Storm Francine flooded Starbase Sept 2024.","Hurricane Frances 2004 ripped 850 aluminum panels off Vehicle Assembly Building","NASA: extreme weather events 400–800× more likely. $7.3B/yr projected coastal damages mid-century"],
+   levers:["Position Sine-Saloum mangroves as 'coastal resilience infrastructure' - not just carbon offsets","Mangrove insurance value: $82B global annual avoided damages (TNC). Bundle as physical risk product","NEPA/Clean Air Act involvement in every SpaceX launch license = Shell's regulatory-facing entry point"]}
+];
+
+// ── NUMBERS DATA ────────────────────────────────────────────────────────────
+const NUMBERS_DATA = [
+  // Shell Financials
+  {cat:"Shell Financials",val:"$3.26B",label:"Shell Q4 2025 adjusted earnings - weakest in ~5 years. Missed $3.53B consensus.",pitch:true,src:"Shell Q4 2025 Results · 40% YoY decline"},
+  {cat:"Shell Financials",val:"$23.7B",label:"Shell full-year 2024 earnings vs $28.3B in 2023 - $4.6B YoY decline.",pitch:true,src:"Shell Annual Report 2024"},
+  {cat:"Shell Financials",val:"$45.7B",label:"Shell net debt Q4 2025, up from $41.2B at Q3. Gearing 20.7%.",pitch:false,src:"Shell Q4 2025 Results"},
+  {cat:"Shell Financials",val:"$2.2–2.4B",label:"Shell RES segment net expense 2024 - still loss-making.",pitch:true,src:"Shell Annual Report 2024"},
+  {cat:"Shell Financials",val:"$996M",label:"RES impairment Q4 2024 on North American renewable generation assets.",pitch:true,src:"Shell Annual Report 2024"},
+  {cat:"Shell Financials",val:"$4.4B",label:"Total Shell low-carbon asset impairment charges, 2024.",pitch:true,src:"Shell Annual Report 2024"},
+  {cat:"Shell Financials",val:"~$450M",label:"Shell total committed NBS investment across multi-decade agreements.",pitch:false,src:"Shell sustainability disclosures"},
+  {cat:"Shell Financials",val:"$52M/yr",label:"Shell's current annual nature-based solutions spend ($86M total NBS+tech 2023, $52M NBS-only).",pitch:true,src:"Shell Annual Report 2023"},
+  {cat:"Shell Financials",val:"$493M",label:"Shell spent on EU ETS compliance in 2022 at €80–100/tCO₂e permit prices.",pitch:false,src:"Shell Annual Report 2022"},
+  {cat:"Shell Financials",val:"$300B+",label:"Shell annual revenue 2025. Market cap exceeds $200B.",pitch:false,src:"Shell Q4 2025 Results"},
+  {cat:"Shell Financials",val:"8.1B boe",label:"Shell total proved reserves - lowest since at least 2013. Reserve life <8 years.",pitch:true,src:"Shell Annual Report 2024"},
+  {cat:"Shell Financials",val:"~1M",label:"Shell B2B business customers across 70+ countries.",pitch:false,src:"Shell investor materials"},
+  // NCI & Emissions
+  {cat:"NCI & Emissions",val:"79→71",label:"NCI trajectory 2016→2024 (est.): 79→77→76→74→~71 gCO₂e/MJ. Target: 15–20% reduction by 2030.",pitch:true,src:"Shell Annual Reports 2016–2024"},
+  {cat:"NCI & Emissions",val:"1,147 Mt",label:"Shell Scope 3 CO₂e 2023 - why NCI is a Scope 3 problem, not operational.",pitch:true,src:"Shell Annual Report 2023"},
+  {cat:"NCI & Emissions",val:"57 Mt",label:"Shell Scope 1+2 CO₂e 2023 - 30% below 2016 baseline. Scope 3 is 20× larger.",pitch:false,src:"Shell Annual Report 2023"},
+  {cat:"NCI & Emissions",val:"25% LTIP",label:"Shell LTIP energy transition weighting - NCI miss = direct exec compensation hit.",pitch:true,src:"Shell Annual Report 2023"},
+  {cat:"NCI & Emissions",val:"12.5% PSP",label:"Shell PSP energy transition weighting. Both tied to NCI performance.",pitch:true,src:"Shell Annual Report 2023"},
+  {cat:"NCI & Emissions",val:"21.8%",label:"Voted against Shell's own energy plan at 2024 AGM.",pitch:true,src:"Shell 2024 AGM results"},
+  {cat:"NCI & Emissions",val:"~30%",label:"Peak shareholder support for Follow This climate resolution (2021) - BlackRock voted in favour.",pitch:false,src:"Shell AGM records 2016–2024"},
+  {cat:"NCI & Emissions",val:"1.73 Gt",label:"Shell total absolute emissions peak - 2018. Has declined since divestments.",pitch:false,src:"Shell Annual Report 2022"},
+  // NBS Investment
+  {cat:"NBS Investment",val:"$4.15/t",label:"Shell average NBS credit purchase price 2024 - near CCC–B floor of $3.50.",pitch:true,src:"Shell NBS disclosures 2024 · AlliedOffsets"},
+  {cat:"NBS Investment",val:"14.5M",label:"Credits retired by Shell 2024 - #1 globally. >50% retired in December alone.",pitch:true,src:"AlliedOffsets 2024 Review"},
+  {cat:"NBS Investment",val:"21.8M",label:"Peak credits retired 2023 = 18% of 120M tonne ambition. Ambition formally abandoned Oct 2023.",pitch:true,src:"Shell Annual Report 2023"},
+  {cat:"NBS Investment",val:"3.5×",label:"Revenue uplift potential if Shell achieves CCP labelling: $4.15→$14.80 average.",pitch:true,src:"MSCI Carbon Markets 2025 · Shell NBS data"},
+  {cat:"NBS Investment",val:"$5–10/t",label:"Shell's NBS generation cost (best-in-class large-scale forestry) - industry proxy.",pitch:false,src:"Industry proxy - not Shell-confirmed"},
+  {cat:"NBS Investment",val:"20 Mt",label:"Carbon credits included in Shell's 2023 NCI calculation (85% Verra, 9% ACR, 6% Gold Standard).",pitch:false,src:"Shell Annual Report 2023"},
+  // NBS Projects
+  {cat:"NBS Projects",val:"9M+ ha",label:"Select Carbon (Australia) - Shell's largest NBS asset by land area.",pitch:false,src:"Select Carbon / Shell partnership"},
+  {cat:"NBS Projects",val:"2.4M ha",label:"Cordillera Azul REDD+ project, Peru.",pitch:false,src:"Shell NBS project disclosures"},
+  {cat:"NBS Projects",val:"~200k ha",label:"Kasigau Corridor Phase II, Kenya - 1.8M verified credits/yr, 400+ jobs.",pitch:true,src:"Wildlife Works / Shell disclosures"},
+  {cat:"NBS Projects",val:"13.9M t",label:"Kasigau Corridor cumulative tCO₂e reductions - 2,300+ scholarships, 25k with clean water.",pitch:true,src:"Wildlife Works Carbon 2024"},
+  {cat:"NBS Projects",val:"3,834 ha",label:"Shell Senegal Sine-Saloum mangrove project (WeForest). Saloum ecosystem €1.5B services value.",pitch:false,src:"WeForest / Shell Senegal Project"},
+  {cat:"NBS Projects",val:"1.2 Mt/yr",label:"Shell Quest CCS (Alberta) nameplate capacity. >7Mt stored through 2023. $41M/yr operating cost.",pitch:false,src:"Shell Quest CCS Annual Report"},
+  {cat:"NBS Projects",val:"1.5→5 Mt",label:"Northern Lights CCS JV Phase 1→2. NOK 7.5B Phase 2 investment. Shell 33.3%.",pitch:false,src:"Northern Lights JV · March 2025"},
+  {cat:"NBS Projects",val:"25 Mt/yr",label:"Shell's 2035 CCS ambition - equivalent to ~25 Quest-sized facilities.",pitch:false,src:"Shell Energy Transition Strategy 2024"},
+  {cat:"NBS Projects",val:"6.7 Mt/yr",label:"Combined Quest + Northern Lights Phase 2 capacity vs 120Mt NBS ambition - gap = NBS must work commercially.",pitch:true,src:"Shell CCS disclosures 2024"},
+  // Credit Pricing
+  {cat:"Credit Pricing",val:"$14.80/t",label:"High-rated (A–AAA) credits average 2025 (MSCI). 4.2× above CCC–B floor.",pitch:true,src:"MSCI Carbon Markets Review 2025"},
+  {cat:"Credit Pricing",val:"$3.50/t",label:"Low-quality (CCC–B) credit floor. Shell's $4.15 avg sits just above this.",pitch:true,src:"MSCI Carbon Markets Review 2025"},
+  {cat:"Credit Pricing",val:"$20–40/t",label:"High-integrity/premium NBS credits. Shell NBS forward contract target range.",pitch:true,src:"Market consensus 2025"},
+  {cat:"Credit Pricing",val:"$20–30/t",label:"Blue carbon (mangrove) credits - stable 2025 market rate.",pitch:false,src:"Ecosystem Marketplace 2025"},
+  {cat:"Credit Pricing",val:"$24–26/t",label:"High-quality ARR credits Sept→Dec 2025 trend.",pitch:false,src:"Ecosystem Marketplace 2025"},
+  {cat:"Credit Pricing",val:">$500/t",label:"Tech removals (DAC) - upper end of carbon credit spectrum.",pitch:false,src:"Clean Air Task Force / BNEF"},
+  {cat:"Credit Pricing",val:"$2.70/t",label:"REDD+ credit average 2024 (lowest segment after Verra scandal).",pitch:false,src:"Ecosystem Marketplace 2024"},
+  {cat:"Credit Pricing",val:"381%",label:"Removal credits priced 381% higher than traditional emission reduction credits (2024).",pitch:false,src:"MSCI Carbon Markets 2024"},
+  {cat:"Credit Pricing",val:"78%",label:"Price premium for credits with robust MRV systems and co-benefit certification.",pitch:true,src:"MSCI/Ecosystem Marketplace 2024"},
+  {cat:"Credit Pricing",val:"4%",label:"Share of all globally issued credits with CCP label as of late 2024 - massive first-mover gap.",pitch:true,src:"ICVCM 2024 Update"},
+  {cat:"Credit Pricing",val:"43%",label:"Share of 2024 VCM retirements from low-rated CCC–B projects (MSCI 2025).",pitch:true,src:"MSCI Carbon Markets Review 2025"},
+  // Market Size
+  {cat:"Market Size",val:"$1.4B",label:"Global VCM value 2024 - slightly below $1.7B 2022 peak.",pitch:false,src:"AlliedOffsets / Ecosystem Marketplace 2024"},
+  {cat:"Market Size",val:"$954M",label:"VCM total market spending 2024 (Sylvera). Rising to ~$1.04B in 2025.",pitch:false,src:"Sylvera Carbon Markets Report 2024"},
+  {cat:"Market Size",val:"$47.5B",label:"VCM projected 2035 at 38% CAGR (Roots Analysis).",pitch:true,src:"Roots Analysis 2024"},
+  {cat:"Market Size",val:"$950B",label:"VCM projected by 2037. 1,700× growth runway from 2024 base.",pitch:true,src:"Multiple projections · Grand View Research"},
+  {cat:"Market Size",val:"$884B/yr",label:"BNEF removal scenario: VCM market value by 2050. Demand 5.9B credits/yr.",pitch:true,src:"BloombergNEF New Energy Outlook 2024"},
+  {cat:"Market Size",val:"34.6%",label:"VCM CAGR 2024–2030.",pitch:false,src:"Grand View Research / MSCI"},
+  {cat:"Market Size",val:"6,500",label:"Companies actively buying voluntary carbon credits globally - severely underpenetrated.",pitch:true,src:"Ecosystem Marketplace 2024"},
+  {cat:"Market Size",val:"42%",label:"Fortune Global 500 committed to using carbon credits in sustainability strategies.",pitch:false,src:"Conference Board 2024"},
+  {cat:"Market Size",val:"$9.3B",label:"Industrial carbon credit market exceeded $9.3B in 2024, growing 15.4% CAGR through 2034.",pitch:false,src:"MarketsandMarkets 2024"},
+  {cat:"Market Size",val:"7×",label:"High-quality credit demand projected to increase 7× by 2030 (South Pole 2026 buyer guide).",pitch:true,src:"South Pole Carbon Buyer Guide 2026"},
+  // Carbon Prices
+  {cat:"Carbon Prices",val:"€83.90/t",label:"EU ETS price December 2025. 2025 range: €60.77–82.60. Q3 avg: ~€72.",pitch:true,src:"EEX / ICE Carbon Markets Dec 2025"},
+  {cat:"Carbon Prices",val:"€126/t",label:"EU ETS consensus forecast 2030 (BloombergNEF, S&P, ICIS, Aurora).",pitch:true,src:"BNEF/S&P Carbon Price Forecast 2024"},
+  {cat:"Carbon Prices",val:"$75–150",label:"Carbon price trajectory in project modelling: $25 (2025) → $75 (2030) → $150 (2040).",pitch:true,src:"Project modelling assumption - BNEF/IMF aligned"},
+  {cat:"Carbon Prices",val:"$75/t",label:"IMF/World Bank advocated global carbon price floor for developed countries by 2030.",pitch:false,src:"IMF Fiscal Monitor 2023 · World Bank"},
+  {cat:"Carbon Prices",val:"$146/t",label:"BNEF removal scenario upper estimate by 2030. Status quo scenario: $13/t.",pitch:true,src:"BloombergNEF Carbon Markets 2024"},
+  {cat:"Carbon Prices",val:"$172/t",label:"BNEF removal scenario carbon price by 2050.",pitch:false,src:"BloombergNEF New Energy Outlook"},
+  {cat:"Carbon Prices",val:"$25–40/t",label:"Current Shell NBS forward contract target range - anchor pricing for aerospace product.",pitch:true,src:"Shell commercial disclosures"},
+  // CBAM
+  {cat:"CBAM",val:"Jan 1 2026",label:"CBAM definitive phase start - certificates due Feb 1, 2027 retroactive to all 2026 emissions.",pitch:true,src:"European Commission CBAM Regulation"},
+  {cat:"CBAM",val:"€70–84/t",label:"CBAM certificate price linked to EU ETS. Shell NBS 2–4× cheaper per tonne.",pitch:true,src:"EU ETS / CBAM linkage mechanism"},
+  {cat:"CBAM",val:"2.6 tCO₂e/t",label:"CBAM default embedded carbon for primary aluminum.",pitch:true,src:"European Commission CBAM default values"},
+  {cat:"CBAM",val:"€4.16M/yr",label:"CBAM cost: 20,000t aerospace aluminum importer at €80/t. Shell NBS: $1.3M/yr.",pitch:true,src:"Calculated from CBAM regulation"},
+  {cat:"CBAM",val:"€6.24M/yr",label:"Same importer at 2030 EU ETS consensus €120/t. Shell NBS @$40/t: $2.08M/yr.",pitch:true,src:"Projected from EU ETS consensus"},
+  {cat:"CBAM",val:"€11.6M/yr",label:"Vietnamese aluminum processor CBAM exposure: 10,000t × 14.5 tCO₂e/t × €80/t.",pitch:false,src:"Calculated from CBAM defaults"},
+  {cat:"CBAM",val:"€3.67M/yr",label:"Airbus fleet CBAM aluminum exposure: 766 A320neos × 59.8 tCO₂e × €80/t.",pitch:false,src:"Calculated from Airbus data + CBAM defaults"},
+  {cat:"CBAM",val:"€450M",label:"CSRD compliance threshold - non-EU companies with EU turnover above this must comply.",pitch:true,src:"EU CSRD Directive 2022"},
+  {cat:"CBAM",val:"25,000 t",label:"California Cap-and-Trade threshold. SpaceX, Lockheed, Northrop, Raytheon all in scope.",pitch:false,src:"CARB Cap-and-Trade Regulation"},
+  // Aerospace Emissions
+  {cat:"Aerospace Emissions",val:"~550 kgCO₂/kg",label:"Titanium effective footprint when flown: 55 kgCO₂/kg smelting × 90% buy-to-fly waste ratio.",pitch:true,src:"Aerospace materials lifecycle studies · Kroll process data"},
+  {cat:"Aerospace Emissions",val:"12–16 t/t",label:"Aerospace-grade aluminum: 12–16 tCO₂/tonne. US primary unwrought: ~14.5 tCO₂e/t.",pitch:true,src:"US DoE / Alcoa LCA data"},
+  {cat:"Aerospace Emissions",val:"20–31 t/t",label:"Carbon fiber: 20–31 tCO₂/tonne (170 MJ electric + thermal per kg PAN-based).",pitch:false,src:"Journal of Cleaner Production 2021"},
+  {cat:"Aerospace Emissions",val:"~2,683 t",label:"Starship per-launch CO₂e (third-party studies, FAA EIS).",pitch:true,src:"FAA Starship EIS 2022 · UCL studies"},
+  {cat:"Aerospace Emissions",val:">90%",label:"Share of spacecraft lifecycle energy embedded in materials before factory door.",pitch:true,src:"ESA / NASA lifecycle assessment literature"},
+  {cat:"Aerospace Emissions",val:"18.1 Mt",label:"Aircraft manufacturing sector annual CO₂e. Aluminum = 56% of that.",pitch:true,src:"Journal of Cleaner Production 2021"},
+  {cat:"Aerospace Emissions",val:"600k t/yr",label:"Representative Tier-1 total emissions: Al 280k + Ti 160k + composites 100k + facility 60k.",pitch:true,src:"Project modelling - materials LCA data"},
+  {cat:"Aerospace Emissions",val:"300k t/yr",label:"Tier-1 supplier residual after 50% abatement - Shell's addressable floor per supplier.",pitch:true,src:"Project modelling"},
+  {cat:"Aerospace Emissions",val:"500×",label:"Rocket black carbon warming effect vs ground-level - 1,000–2,000t/yr in stratosphere (2026 NASA/UCL).",pitch:false,src:"NASA/UCL stratospheric black carbon studies 2026"},
+  // TAM
+  {cat:"TAM",val:"15M t/yr",label:"Total addressable residual emissions: 50 Tier-1+2 suppliers × 300k t residual.",pitch:true,src:"Project modelling · 50 supplier universe"},
+  {cat:"TAM",val:"$375M/yr",label:"TAM at $25/t · 15M tCO₂ (2025 pricing).",pitch:true,src:"Derived from TAM model"},
+  {cat:"TAM",val:"$600M/yr",label:"TAM at $40/t · 15M tCO₂ (Shell forward contract target price).",pitch:true,src:"Derived from TAM model"},
+  {cat:"TAM",val:"$1.125B/yr",label:"TAM at $75/t · 15M tCO₂ (2030 carbon price consensus).",pitch:true,src:"Derived from TAM model"},
+  {cat:"TAM",val:"45M t/yr",label:"2035 TAM after space industry 3× growth ($630B→$1.8T). TAM in dollar terms triples.",pitch:true,src:"McKinsey space economy projections × TAM model"},
+  {cat:"TAM",val:"~12,000",label:"Total A&D manufacturers across all tiers globally (McKinsey/Z2Data).",pitch:false,src:"McKinsey/Z2Data 2023"},
+  {cat:"TAM",val:"~5,000",label:"EcoVadis supplier scorecards generated 2024 (from 1,000 yr1), target 10,000.",pitch:true,src:"IAEG EcoVadis program data 2024"},
+  // Revenue Scenarios
+  {cat:"Revenue Scenarios",val:"$1.875M",label:"Conservative: 75k tonnes × $25/t (5% suppliers, 10% coverage).",pitch:false,src:"Shell PIE revenue model"},
+  {cat:"Revenue Scenarios",val:"$36M/yr",label:"Base case: 900k tonnes × $40/t = $36M/yr. Covers 69% of $52M NBS investment.",pitch:true,src:"Shell PIE revenue model - base scenario"},
+  {cat:"Revenue Scenarios",val:"$150M/yr",label:"Aggressive: 3.75M tonnes × $40/t.",pitch:true,src:"Shell PIE revenue model - aggressive scenario"},
+  {cat:"Revenue Scenarios",val:"$281M/yr",label:"Aggressive scenario at $75/t = $281.25M/yr. Profit $225M at 80% margin.",pitch:true,src:"Shell PIE revenue model - aggressive + 2030 price"},
+  {cat:"Revenue Scenarios",val:"$450M/yr",label:"2035 base case: 25% TAM capture at $40/t with 3× industry growth.",pitch:true,src:"Shell PIE 2035 projection"},
+  {cat:"Revenue Scenarios",val:"$1.125B/yr",label:"2035 aggressive: 25% TAM capture at $75/t with 3× industry growth.",pitch:true,src:"Shell PIE 2035 projection"},
+  {cat:"Revenue Scenarios",val:"69%",label:"Base case aerospace revenue covers 69% of Shell's $52M annual NBS investment.",pitch:true,src:"Derived: $36M / $52M"},
+  {cat:"Revenue Scenarios",val:"$150M/yr",label:"Revenue unavailable to Shell if South Pole captures 25% aerospace TAM at $40/t.",pitch:true,src:"Competitive gap analysis"},
+  // Margin Model
+  {cat:"Margin Model",val:"62.5%",label:"Gross margin: base scenario $40 sale / $15 generation cost. $22.5M profit on $36M revenue.",pitch:true,src:"Shell PIE margin model"},
+  {cat:"Margin Model",val:"80%",label:"Margin: aggressive scenario at $75/t. Revenue $281M, profit $225M.",pitch:true,src:"Shell PIE margin model"},
+  {cat:"Margin Model",val:"$15/t",label:"Generation cost mid-point proxy (industry). Shell sale price basis for modelling.",pitch:true,src:"Industry proxy - not Shell-confirmed"},
+  {cat:"Margin Model",val:"$22.5M",label:"Base scenario gross profit: 900k t × ($40–$15) generation spread.",pitch:true,src:"Shell PIE margin model"},
+  {cat:"Margin Model",val:"~$14/t",label:"Aggressive scenario break-even sale price - already below current NBS market price.",pitch:true,src:"Derived: $52M / 3.75M tonnes"},
+  {cat:"Margin Model",val:"30%",label:"Community benefit share of revenue built into unit economics (Kenya/Nigeria mandate).",pitch:false,src:"Kenya/Nigeria Carbon Credit Acts"},
+  // Buyer Liability
+  {cat:"Buyer Liability",val:"$12M/yr",label:"Tier-1 supplier annual carbon liability at $40/t (300k tCO₂ residual).",pitch:true,src:"Buyer liability model"},
+  {cat:"Buyer Liability",val:"$22.5M/yr",label:"Same supplier at $75/t (2030). $45M/yr at $150/t (2040).",pitch:true,src:"Buyer liability model"},
+  {cat:"Buyer Liability",val:"$675M",label:"15-year cumulative liability per supplier at $150/t (2040 price scenario).",pitch:true,src:"Buyer liability model"},
+  {cat:"Buyer Liability",val:"$112.5M",label:"15-yr cumulative per supplier locked at $25/t now vs $675M at $150/t - $562M saved.",pitch:true,src:"Buyer liability model"},
+  {cat:"Buyer Liability",val:"$37.5M/yr",label:"Annual savings in 2040 per supplier: $150 spot vs $25/t locked today.",pitch:true,src:"Buyer liability model"},
+  {cat:"Buyer Liability",val:"$15M/yr",label:"Annual savings in 2030 per supplier: $75 spot vs $25/t locked today.",pitch:true,src:"Buyer liability model"},
+  {cat:"Buyer Liability",val:"$7M/yr",label:"Aluminum-only carbon cost at $25/t (280k tCO₂). Rises to $42M/yr at $150/t.",pitch:false,src:"Material-specific liability model"},
+  {cat:"Buyer Liability",val:"$12M/yr",label:"Titanium-only carbon cost at $75/t (160k tCO₂). Titanium highest-leverage material.",pitch:false,src:"Material-specific liability model"},
+  {cat:"Buyer Liability",val:"12–24 mo",label:"Switching cost after integrating Shell compliance infrastructure - ERP + CBAM + EcoVadis lock-in.",pitch:true,src:"Procurement integration analysis"},
+  // SpaceX
+  {cat:"SpaceX",val:"$1.5T",label:"SpaceX 2026 IPO valuation. Morgan Stanley + Goldman Sachs leading.",pitch:true,src:"Bloomberg / WSJ SpaceX IPO coverage 2025"},
+  {cat:"SpaceX",val:"$67M",label:"Falcon 9 commercial launch revenue per launch.",pitch:false,src:"SpaceX commercial pricing 2024"},
+  {cat:"SpaceX",val:"$4M/day",label:"Cost of single Starbase launch delay per SpaceX court filing.",pitch:true,src:"SpaceX v. FAA court filings"},
+  {cat:"SpaceX",val:"$720M",label:"6-month FAA/NEPA delay total cost at $4M/day - climate = operational risk.",pitch:true,src:"Derived from court filing × 180 days"},
+  {cat:"SpaceX",val:"$1.05B",label:"SpaceX 10-year supply agreement with Sphere Corp for nickel and superalloys.",pitch:false,src:"SpaceX commercial filings 2024"},
+  {cat:"SpaceX",val:"93",label:"Cape Canaveral orbital flights 2024 - up 35% YoY.",pitch:false,src:"FAA launch log 2024"},
+  {cat:"SpaceX",val:"3,000+",label:"SpaceX external suppliers. ~1,100 delivering components weekly. 85% in-house.",pitch:true,src:"SpaceX supplier program disclosures"},
+  // SLL
+  {cat:"SLL",val:"$463B",label:"Outstanding sustainability-linked loans 2024 - ~10% of all loan issuances.",pitch:true,src:"Bloomberg SLL Market Data 2024"},
+  {cat:"SLL",val:"10%",label:"SLL as proportion of total loan market. Carbon is most common KPI.",pitch:false,src:"Bloomberg SLL Market Data 2024"},
+  {cat:"SLL",val:"77.4%",label:"S&P 500 companies incorporating ESG in exec compensation. Energy = 80.2%, highest sector.",pitch:false,src:"Conference Board 2024"},
+  // Mangroves
+  {cat:"Mangroves",val:"$65–82B",label:"Annual property damage avoided globally by mangroves (Scientific Reports · TNC).",pitch:true,src:"Scientific Reports Nature 2020 · TNC 2021"},
+  {cat:"Mangroves",val:"$855B",label:"Global mangrove flood protection NPV.",pitch:true,src:"TNC / UN-EPLC valuation study"},
+  {cat:"Mangroves",val:"$1.5B",label:"Hurricane Irma (2017): mangroves prevented $1.5B flood damage in Florida, protecting 626k+ people.",pitch:true,src:"Scientific Reports Nature 2020"},
+  {cat:"Mangroves",val:"~$4.1B",label:"Hurricane Ian damage reduction where mangroves present vs where removed.",pitch:true,src:"The Nature Conservancy 2023"},
+  {cat:"Mangroves",val:"$67.5M/yr",label:"One Florida county avoided flood losses from existing mangroves annually.",pitch:false,src:"NOAA / TNC Florida study"},
+  {cat:"Mangroves",val:"4×",label:"Mangroves sequester carbon 4× per hectare vs tropical rainforests (Donato et al., 2011).",pitch:true,src:"Donato et al., Nature Geoscience 2011"},
+  {cat:"Mangroves",val:"66%",label:"First 100m of mangrove reduces wave heights by up to 66%.",pitch:false,src:"IUCN mangrove protection studies"},
+  // KSC Risk
+  {cat:"KSC Risk",val:"88%",label:"KSC shoreline currently in retreat from sea level rise (~0.5ft over 20 years).",pitch:true,src:"NASA NTRS coastal risk assessment"},
+  {cat:"KSC Risk",val:"14%",label:"Annual flood risk for Complex 39A (SpaceX primary Florida pad) today. Annual by 2060.",pitch:true,src:"NASA coastal risk assessment 2023"},
+  {cat:"KSC Risk",val:"9 ft",label:"Starbase orbital launch tower base elevation above mean sea level. Tidal flats: <3ft.",pitch:true,src:"FAA Starbase EIS 2022"},
+  {cat:"KSC Risk",val:"$7.3B/yr",label:"Projected coastal infrastructure damages at US launch sites by mid-century (NASA).",pitch:true,src:"NASA NTRS 2023"},
+  {cat:"KSC Risk",val:"400–800×",label:"Extreme weather events more likely due to climate change (NASA climate projections).",pitch:false,src:"NASA climate risk analysis"},
+  {cat:"KSC Risk",val:"5–9.5 ft",label:"Sea-level rise threat to coastal launch sites by 2100 (NASA NTRS).",pitch:false,src:"NASA NTRS 2023"},
+  // Space Industry
+  {cat:"Space Industry",val:"$630B→$1.8T",label:"Space economy today → 2035 at 9% CAGR (McKinsey/WEF).",pitch:true,src:"McKinsey Space Economy Report 2023 · WEF"},
+  {cat:"Space Industry",val:"$2.3T",label:"Upside scenario if Starship achieves full reusability by 2027 (Morgan Stanley).",pitch:false,src:"Morgan Stanley Space Economy Report 2024"},
+  {cat:"Space Industry",val:"180",label:"McKinsey projection for annual launches 2023–2035.",pitch:false,src:"McKinsey Space Economy Report 2023"},
+  {cat:"Space Industry",val:"9% CAGR",label:"Space industry compound annual growth rate to 2035 - TAM triples as demand grows.",pitch:true,src:"McKinsey/WEF Space Economy 2023"},
+  // Community
+  {cat:"Community",val:"25–40%",label:"Kenya/Nigeria Carbon Credit Acts: legally mandated community revenue share.",pitch:true,src:"Kenya Carbon Markets Regulations 2023 · Nigeria CCX"},
+  {cat:"Community",val:"$580/yr",label:"Average farm income increase per household from Sistema.bio digesters (Shell Foundation).",pitch:false,src:"Sistema.bio Impact Report 2023"},
+  {cat:"Community",val:"60,000+",label:"Sistema.bio digesters deployed across Africa, Asia, Latin America.",pitch:false,src:"Sistema.bio 2023"},
+  {cat:"Community",val:"169,000",label:"People reached with flood protection/food security by Wetlands Intl project (Senegal delta).",pitch:false,src:"Wetlands International Senegal Project"},
+  {cat:"Community",val:"50,000",label:"Community members receiving sustainable livelihood alternatives (Wetlands Intl, Senegal). Separate from 169k.",pitch:false,src:"Wetlands International Senegal Project"},
+  // Competitive
+  {cat:"Competitive",val:"12–18 mo",label:"Competitive window before first-mover advantage closes. South Pole Feb 2026 guide confirms.",pitch:true,src:"South Pole Carbon Buyer Guide Feb 2026"},
+  {cat:"Competitive",val:">$200M",label:"South Pole revenue pre-2023 downturn. 700+ projects, 1,000+ clients, 200M tonnes reduced.",pitch:false,src:"South Pole disclosures pre-2023"},
+  {cat:"Competitive",val:"62%",label:"REDD+ credit value destruction following 2023 Verra scandal. Prices dropped 7× in one month.",pitch:true,src:"Forest Trends / Carbon Brief 2023"},
+  {cat:"Competitive",val:"$45M",label:"Rio Tinto + Hydro joint R&D investment: aluminum smelting CCS over 5 years. Complementary, not competing.",pitch:false,src:"Rio Tinto/Hydro press release 2024"},
+  {cat:"Competitive",val:">80%",label:"Hyperscalers with 100% renewable commitments by 2023 - from Microsoft/Google/Amazon PPA analogy starting 2012–14.",pitch:true,src:"BloombergNEF Renewable Energy Report 2023"},
+  {cat:"Competitive",val:"35%+",label:"Top 5 companies (Verra, South Pole, CIP, EcoAct, 3Degrees) held >35% VCM market share 2025.",pitch:false,src:"Ecosystem Marketplace 2025"},
+  // VCM Structure
+  {cat:"VCM Structure",val:"56%",label:"Nature-based credits as share of global voluntary issuance 2024. Mangroves +10× since 2020.",pitch:false,src:"Ecosystem Marketplace 2024"},
+  {cat:"VCM Structure",val:"305M t",label:"Global credit issuance 2023 in tCO₂e.",pitch:false,src:"Ecosystem Marketplace 2023"},
+  {cat:"VCM Structure",val:"95M",label:"Record credits retired in H1 2025.",pitch:false,src:"Sylvera / AlliedOffsets H1 2025"},
+  {cat:"VCM Structure",val:"80%",label:"High-durability removal pre-purchases from single buyer (Microsoft) in 2024.",pitch:false,src:"MSCI Carbon Markets 2024"},
+  {cat:"VCM Structure",val:"73%",label:"Financial institutions wanting portfolio companies to have a carbon credit strategy (South Pole 2026).",pitch:true,src:"South Pole Carbon Buyer Guide 2026"},
+  {cat:"VCM Structure",val:"€19/t",label:"CORSIA-eligible credits (aviation compliance) - creates separate demand tier.",pitch:false,src:"CORSIA/ICAO market data 2024"},
+];
+
+// ── RENDER CARDS ─────────────────────────────────────────────────────────────
+function renderCards(filter='all') {
+  const grid = document.getElementById('cards-grid');
+  grid.innerHTML = '';
+  const items = filter==='all' ? CARDS_DATA :
+    ['critical','high','opportunity','regulatory'].includes(filter)
+      ? CARDS_DATA.filter(c=>c.level===filter)
+      : CARDS_DATA.filter(c=>c.cat===filter);
+  items.forEach(card=>{
+    const el=document.createElement('div');
+    el.className='card';
+    el.style.setProperty('--cc',card.clr);
+    el.innerHTML=`
+      <div class="card-header">
+        <div class="card-cat">${card.cat}</div>
+        <div class="card-chip">${card.level.toUpperCase()}</div>
+      </div>
+      <div class="card-title">${card.title}</div>
+      <div class="card-desc">${card.desc}</div>
+      <div class="card-kpis">
+        ${card.kpis.map(k=>`<div class="kpi-line"><span class="kl-label">${k.l}</span><div class="kl-track"><div class="kl-fill" data-w="${k.v}"></div></div><span class="kl-val">${k.v}</span></div>`).join('')}
+      </div>
+      <div class="card-expand">
+        <div class="expand-head">Data Signals</div>
+        <ul class="expand-list">${card.signals.map(s=>`<li>${s}</li>`).join('')}</ul>
+        <div class="expand-head">Solution Levers</div>
+        <ul class="expand-list">${card.levers.map(l=>`<li>${l}</li>`).join('')}</ul>
+      </div>`;
+    el.addEventListener('click',()=>el.classList.toggle('open'));
+    grid.appendChild(el);
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('.kl-fill').forEach(b=>b.style.width=b.dataset.w+'%');
+  },60);
+}
+
+// ── RENDER NUMBERS ────────────────────────────────────────────────────────────
+let pitchOnly=true;
+function renderNumbers() {
+  const grid=document.getElementById('nums-grid');
+  const search=document.getElementById('num-search').value.toLowerCase();
+  const cat=document.getElementById('num-cat').value;
+  grid.innerHTML='';
+  let count=0;
+  NUMBERS_DATA.forEach(n=>{
+    const matchPitch=!pitchOnly||n.pitch;
+    const matchCat=cat==='all'||n.cat===cat;
+    const matchSearch=!search||(n.val+n.label+n.cat+n.src).toLowerCase().includes(search);
+    if(!matchPitch||!matchCat||!matchSearch)return;
+    count++;
+    const el=document.createElement('div');
+    el.className='num-card'+(n.pitch?' pitch-crit':'');
+    el.innerHTML=`
+      <div class="num-top">
+        <div class="num-cat">${n.cat}</div>
+        ${n.pitch?'<div class="num-badge">★ PITCH</div>':''}
+      </div>
+      <div class="num-val">${n.val}</div>
+      <div class="num-lbl">${n.label}</div>
+      <div class="num-src">Source: ${n.src}</div>`;
+    el.addEventListener('click',()=>el.classList.toggle('open'));
+    grid.appendChild(el);
+  });
+  document.getElementById('num-count').textContent=`${count} numbers`;
+}
+
+// ── SCENARIO MODELER ─────────────────────────────────────────────────────────
+const SCENARIOS={
+  conservative:{suppliers:2,coverage:10,label:'Conservative'},
+  base:{suppliers:10,coverage:30,label:'Base'},
+  aggressive:{suppliers:25,coverage:50,label:'Aggressive'}
+};
+let currentScen='base',tam2035=false;
+
+function fmt(n){
+  if(n>=1e9)return'$'+(n/1e9).toFixed(1)+'B';
+  if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';
+  if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'k';
+  return'$'+n.toFixed(0);
+}
+
+const METRIC_EXPLAINERS = {
+  revenue: {
+    title: 'Shell Revenue / Year',
+    color: 'var(--y)',
+    body: `<strong>What it is:</strong> The total annual income Shell earns from selling NBS carbon credits to aerospace suppliers.<br><br><strong>What drives it:</strong> Three levers — how many suppliers Shell has contracted, what percentage of each supplier's residual emissions Shell covers, and the carbon price per tonne. Adjust the sliders to see each lever's impact.<br><br><strong>Why it matters:</strong> This is the top-line number that determines whether Shell's NBS portfolio transitions from a cost centre to a revenue line.`,
+    formula: 'Suppliers captured × (residual emissions per supplier × coverage %) × carbon price/tonne'
+  },
+  profit: {
+    title: 'Shell Gross Profit',
+    color: 'var(--g)',
+    body: `<strong>What it is:</strong> Revenue minus Shell's internal cost to generate the NBS credits.<br><br><strong>What drives it:</strong> The spread between Shell's sale price and its generation cost. Generation cost is fixed — it covers project development, satellite MRV monitoring, Verra certification, and community obligations across Shell's NBS portfolio. Every dollar the carbon price rises goes straight to margin.<br><br><strong>Why it matters:</strong> Strong gross margin means the business is viable even at conservative carbon prices, with significant upside as the market matures toward 2030.`,
+    formula: 'Revenue − (total tonnes × generation cost/tonne)'
+  },
+  coverage: {
+    title: '% of $52M NBS Investment Covered',
+    color: 'var(--o)',
+    body: `<strong>What it is:</strong> How much of Shell's existing annual NBS investment the aerospace segment alone offsets.<br><br><strong>What drives it:</strong> Shell currently books its NBS portfolio as a $52M/yr cost centre. As aerospace revenue grows, it progressively neutralises that cost — and beyond 100%, Shell is generating net profit on assets it already owns.<br><br><strong>Why it matters:</strong> This reframes the entire pitch. Shell isn't being asked to take on new risk — it's being shown how to monetise something it's already paying for.`,
+    formula: 'Annual revenue from aerospace ÷ $52M Shell NBS annual investment'
+  },
+  liability: {
+    title: 'Buyer Liability Per Supplier / Year',
+    color: 'var(--r)',
+    body: `<strong>What it is:</strong> The annual carbon compliance cost a Tier-1 aerospace supplier faces if they do nothing — covering their full residual emissions at the current carbon price.<br><br><strong>What drives it:</strong> Each Tier-1 supplier carries roughly 300,000 tonnes of residual emissions that cannot be eliminated through electrification or process efficiency. At any realistic carbon price, that's a significant balance sheet liability — and it compounds over 15 years.<br><br><strong>Why it matters:</strong> Shell's offer eliminates this liability at a fraction of the cost of CBAM certificates, making the ROI argument immediate and CFO-legible.`,
+    formula: 'Supplier residual emissions × carbon price/tonne (full 300k t coverage)'
+  }
+};
+
+let activeMetric = null;
+function showMetric(key){
+  const data = METRIC_EXPLAINERS[key];
+  const body = document.getElementById('me-body');
+  const content = document.getElementById('me-content');
+  document.querySelectorAll('.me-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.me-btn[data-metric="${key}"]`).classList.add('active');
+  if(activeMetric === key && body.style.display !== 'none'){
+    body.style.display = 'none';
+    activeMetric = null;
+    return;
+  }
+  content.innerHTML = `<div style="font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:${data.color};margin-bottom:0.5rem">${data.title}</div>${data.body}<div class="me-formula">Formula: ${data.formula}</div>`;
+  body.style.display = 'block';
+  activeMetric = key;
+}
+function closeMetric(){
+  document.getElementById('me-body').style.display = 'none';
+  document.querySelectorAll('.me-btn').forEach(b => b.classList.remove('active'));
+  activeMetric = null;
+}
+
+function toggleFormula(){
+  const toggle=document.getElementById('formula-toggle');
+  const body=document.getElementById('formula-body');
+  toggle.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+function updateModeler(){
+  const price=+document.getElementById('price-slider').value;
+  const sups=+document.getElementById('suppliers-slider').value;
+  const cov=+document.getElementById('coverage-slider').value;
+  const multiplier=tam2035?3:1;
+  const residualPerSup=300000*multiplier;
+  const tonnes=sups*(residualPerSup*(cov/100));
+  const revenue=tonnes*price;
+  const genCost=15;
+  const grossProfit=tonnes*(price-genCost);
+  const margin=price>genCost?((price-genCost)/price*100):0;
+  const communityShare=revenue*0.3;
+  const netAfterCommunity=grossProfit-communityShare;
+  const nbs52m=52e6;
+  const coveragePct=Math.min(999,Math.round(revenue/nbs52m*100));
+  const buyerLiability=300000*price;
+  const buyer15yr=buyerLiability*15;
+  const cbamPrice=80; // EUR approx
+  const savingPerSupplier=(300000*(cbamPrice-price));
+
+  document.getElementById('out-revenue').textContent=fmt(revenue);
+  document.getElementById('out-tonnes').textContent=(tonnes/1e6).toFixed(2)+'M tonnes';
+  document.getElementById('out-profit').textContent=fmt(Math.max(0,grossProfit));
+  document.getElementById('out-margin').textContent=Math.max(0,margin).toFixed(1)+'% margin';
+  document.getElementById('out-coverage-pct').textContent=coveragePct+'%';
+  document.getElementById('out-buyer-liability').textContent=fmt(buyerLiability);
+  document.getElementById('out-15yr').textContent='15-yr cumulative: '+fmt(buyer15yr);
+
+  document.getElementById('bt-vol').textContent=(tonnes/1e6).toFixed(2)+'M t';
+  document.getElementById('bt-price').textContent='$'+price+'/t';
+  document.getElementById('bt-cost').textContent='$'+genCost+'/t';
+  document.getElementById('bt-margin-t').textContent='$'+(price-genCost)+'/t';
+  document.getElementById('bt-margin-pct').textContent=Math.max(0,margin).toFixed(1)+'%';
+  document.getElementById('bt-community').textContent=fmt(communityShare);
+  document.getElementById('bt-net').textContent=fmt(Math.max(0,netAfterCommunity));
+  document.getElementById('bt-saving').textContent=fmt(Math.max(0,savingPerSupplier))+'/supplier';
+  document.getElementById('price-val').textContent='$'+price;
+  document.getElementById('suppliers-val').textContent=sups;
+  document.getElementById('coverage-val').textContent=cov+'%';
+
+  // Formula chain
+  if(document.getElementById('fml-sups')){
+    document.getElementById('fml-sups').textContent=sups;
+    document.getElementById('fml-cov').textContent=cov+'%';
+    document.getElementById('fml-price').textContent='$'+price+'/t';
+    document.getElementById('fml-tonnes').textContent=(tonnes>=1e6?(tonnes/1e6).toFixed(2)+'M':(tonnes/1e3).toFixed(0)+'k')+' t';
+    document.getElementById('fml-revenue').textContent=fmt(revenue);
+    document.getElementById('fml-profit').textContent=fmt(Math.max(0,grossProfit));
+    document.getElementById('fml-margin').textContent=Math.max(0,margin).toFixed(1)+'%';
+    document.getElementById('fml-community').textContent=fmt(communityShare);
+    document.getElementById('fml-net').textContent=fmt(Math.max(0,netAfterCommunity));
+    document.getElementById('fml-coverage').textContent=coveragePct+'%';
+    document.getElementById('fml-buyer').textContent=fmt(buyerLiability)+'/yr';
+    document.getElementById('fml-saving').textContent=fmt(Math.max(0,savingPerSupplier))+'/supplier';
+  }
+
+  // CBAM vs Margin strip
+  const ratio=(cbamPrice/price).toFixed(1);
+  document.getElementById('strip-cbam-saving').textContent=ratio+'× cheaper';
+  document.getElementById('strip-cbam-detail').textContent=`Shell $${price}/t vs CBAM ~€${cbamPrice}/t · Saves ${fmt(Math.max(0,savingPerSupplier))} per supplier vs certificates`;
+  document.getElementById('strip-margin-pct').textContent=Math.max(0,margin).toFixed(1)+'%';
+  document.getElementById('strip-margin-detail').textContent=`$${price-genCost}/t profit · $${genCost}/t cost · Margin floor 40% at $25 spot price`;
+
+  // insight
+  let insight='';
+  if(revenue>=150e6)insight=`Aggressive scenario generates <strong>${fmt(revenue)}/yr</strong> - covers entire $52M NBS investment ${coveragePct}× over. South Pole capturing same share = <strong>$150M+/yr unavailable to Shell</strong>.`;
+  else if(revenue>=30e6)insight=`Base scenario at $${price}/t recovers <strong>${coveragePct}% of Shell's $52M annual NBS investment</strong> from aerospace alone. Break-even full investment at ~$58/t in base, or ~$14/t in aggressive (already below market).`;
+  else insight=`Conservative entry at $${price}/t · ${sups} suppliers. Proof-of-concept before scaling. Note: South Pole already targeting aerospace segment in 2026 buyer guide - <strong>window is 12–18 months</strong>.`;
+  document.getElementById('insight-text').innerHTML=insight;
+}
+
+// Scenario preset buttons
+document.querySelectorAll('.sb').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.sb').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const s=SCENARIOS[btn.dataset.scen];
+    document.getElementById('suppliers-slider').value=s.suppliers;
+    document.getElementById('coverage-slider').value=s.coverage;
+    currentScen=btn.dataset.scen;
+    document.getElementById('scen-name').textContent=s.label;
+    updateModeler();
+  });
+});
+
+['price-slider','suppliers-slider','coverage-slider'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',updateModeler);
+});
+
+document.getElementById('tam-toggle').addEventListener('change',e=>{
+  tam2035=e.target.checked;
+  updateModeler();
+});
+
+// ── FILTERS & NAV ────────────────────────────────────────────────────────────
+document.getElementById('card-filters').addEventListener('click',e=>{
+  if(!e.target.matches('.fb'))return;
+  document.querySelectorAll('.fb').forEach(b=>{b.classList.remove('fa','fr','fg','fo','fb2')});
+  const f=e.target.dataset.f;
+  const activeClass={'critical':'fr','high':'fo','opportunity':'fg','regulatory':'fb2','all':'fa'}[f]||'fa';
+  e.target.classList.add(activeClass);
+  renderCards(f);
+});
+
+document.getElementById('pitch-toggle').addEventListener('click',()=>{
+  pitchOnly=!pitchOnly;
+  document.getElementById('pitch-toggle').classList.toggle('on',pitchOnly);
+  renderNumbers();
+});
+
+document.getElementById('num-search').addEventListener('input',renderNumbers);
+document.getElementById('num-cat').addEventListener('change',renderNumbers);
+
+document.querySelectorAll('.ntab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('sec-'+tab.dataset.sec).classList.add('active');
+    if(tab.dataset.sec==='numbers')renderNumbers();
+    if(tab.dataset.sec==='cards')renderCards();
+    if(tab.dataset.sec==='modeler')updateModeler();
+  });
+});
+
+
+// ── HERO CANVAS ──────────────────────────────────────────────────────────────
+(function(){
+  const c = document.getElementById('hero-canvas');
+  if(!c) return;
+  function resize(){
+    c.width = c.offsetWidth;
+    c.height = 180;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  const ctx = c.getContext('2d');
+  const COLORS = ['rgba(240,180,41,', 'rgba(0,229,160,', 'rgba(77,166,255,', 'rgba(181,122,255,'];
+  let nodes = [];
+  function initNodes(){
+    const W = c.width, H = c.height;
+    nodes = [];
+    for(let i=0;i<38;i++) nodes.push({
+      x: Math.random()*W, y: Math.random()*H,
+      vx:(Math.random()-0.5)*0.35, vy:(Math.random()-0.5)*0.35,
+      r: 1.5+Math.random()*3,
+      c: COLORS[Math.floor(Math.random()*COLORS.length)],
+      pulse: Math.random()*Math.PI*2
+    });
+  }
+  initNodes();
+  window.addEventListener('resize',()=>{resize();initNodes();});
+  function drawCanvas(){
+    const W = c.width, H = c.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(10,13,20,0.88)';
+    ctx.fillRect(0,0,W,H);
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<110){
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x,nodes[i].y);
+          ctx.lineTo(nodes[j].x,nodes[j].y);
+          ctx.strokeStyle=`rgba(240,180,41,${0.07*(1-dist/110)})`;
+          ctx.lineWidth=0.7;
+          ctx.stroke();
+        }
+      }
+    }
+    nodes.forEach(n=>{
+      n.pulse += 0.022;
+      const alpha = 0.45 + 0.4*Math.sin(n.pulse);
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle=n.c+alpha+')';
+      ctx.fill();
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0||n.x>W) n.vx*=-1;
+      if(n.y<0||n.y>H) n.vy*=-1;
+    });
+    ctx.font='500 9px "DM Mono", monospace';
+    ctx.fillStyle='rgba(240,180,41,0.35)';
+    ctx.fillText('SHELL NBS NETWORK  ·  AEROSPACE SUPPLY CHAIN  ·  15M tCO₂/yr ADDRESSABLE', 16, H-12);
+    requestAnimationFrame(drawCanvas);
+  }
+  requestAnimationFrame(drawCanvas);
+})();
+
+// ── FLOATING SHAPES ───────────────────────────────────────────────────────────
+(function(){
+  const shapeDefs = [
+    // [section-id, shape, size, top, left/right, color, animation, delay]
+    ['sec-overview',  'hex',    70,  '12%', {left:'92%'},  'rgba(240,180,41,0.07)',  'floatA 7s ease-in-out infinite', '0s'],
+    ['sec-overview',  'ring',   50,  '55%', {left:'3%'},   'rgba(0,229,160,0.09)',   'floatB 9s ease-in-out infinite', '1s'],
+    ['sec-modeler',   'tri',    60,  '10%', {left:'94%'},  'rgba(77,166,255,0.08)',  'floatC 8s ease-in-out infinite', '0.5s'],
+    ['sec-modeler',   'ring',   40,  '75%', {left:'2%'},   'rgba(240,180,41,0.06)',  'floatA 11s ease-in-out infinite','2s'],
+    ['sec-cards',     'hex',    55,  '8%',  {left:'95%'},  'rgba(181,122,255,0.07)', 'floatB 10s ease-in-out infinite','0s'],
+    ['sec-numbers',   'tri',    45,  '15%', {left:'2%'},   'rgba(0,229,160,0.06)',   'floatC 9s ease-in-out infinite', '1.5s'],
+    ['sec-matrix',    'ring',   65,  '8%',  {left:'93%'},  'rgba(240,180,41,0.07)',  'floatA 12s ease-in-out infinite','0s'],
+    ['sec-timeline',  'hex',    50,  '12%', {left:'3%'},   'rgba(77,166,255,0.07)',  'floatB 8s ease-in-out infinite', '1s'],
+  ];
+  function makeSVG(shape, size, color){
+    const s = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    s.setAttribute('width', size); s.setAttribute('height', size);
+    s.setAttribute('viewBox','0 0 100 100');
+    s.style.display='block';
+    if(shape==='hex'){
+      const p = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+      p.setAttribute('points','50,4 93,27 93,73 50,96 7,73 7,27');
+      p.setAttribute('fill','none'); p.setAttribute('stroke',color); p.setAttribute('stroke-width','3');
+      s.appendChild(p);
+    } else if(shape==='ring'){
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx','50'); c.setAttribute('cy','50'); c.setAttribute('r','42');
+      c.setAttribute('fill','none'); c.setAttribute('stroke',color); c.setAttribute('stroke-width','3');
+      s.appendChild(c);
+    } else if(shape==='tri'){
+      const p = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+      p.setAttribute('points','50,6 94,88 6,88');
+      p.setAttribute('fill','none'); p.setAttribute('stroke',color); p.setAttribute('stroke-width','3');
+      s.appendChild(p);
+    }
+    return s;
+  }
+  shapeDefs.forEach(([secId, shape, size, top, pos, color, anim, delay])=>{
+    const sec = document.getElementById(secId);
+    if(!sec) return;
+    const wrap = document.createElement('div');
+    wrap.className='float-shape';
+    wrap.style.cssText=`position:absolute;top:${top};pointer-events:none;z-index:0;animation:${anim};animation-delay:${delay};`;
+    if(pos.left) wrap.style.left=pos.left;
+    if(pos.right) wrap.style.right=pos.right;
+    if(getComputedStyle(sec).position==='static') sec.style.position='relative';
+    wrap.appendChild(makeSVG(shape, size, color));
+    sec.appendChild(wrap);
+    setTimeout(()=>wrap.classList.add('visible'), 600);
+  });
+})();
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
+(function(){
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:0.08});
+  function addReveal(){
+    document.querySelectorAll('.data-table-wrap, .kpi-cell, .cbam-cell, .tl-col, .m-cell, .out-panel, .matrix-wrap, .window-alert, .full-table-wrap').forEach(el=>{
+      if(!el.classList.contains('reveal')){ el.classList.add('reveal'); obs.observe(el); }
+    });
+  }
+  addReveal();
+  // re-run when tabs switch since sections are hidden/shown
+  document.querySelectorAll('.ntab').forEach(t=>t.addEventListener('click',()=>setTimeout(addReveal,60)));
+})();
+
+
+// ── KPI BAR ANIMATION ─────────────────────────────────────────────────────────
+(function(){
+  function animBars(){
+    document.querySelectorAll('.kpi-bar-bottom[data-w]').forEach((bar, i) => {
+      setTimeout(() => { bar.style.width = bar.dataset.w; }, 700 + i * 100);
+    });
+  }
+  animBars();
+})();
+
+// ── ON-LOAD HERO ANIMATION ─────────────────────────────────────────────────────
+(function(){
+  const els = [
+    document.querySelector('.hero-eyebrow'),
+    document.querySelector('.hero-title'),
+    document.querySelector('.hero-desc'),
+    document.querySelector('.hero-thesis-wrap'),
+  ];
+  els.forEach((el,i)=>{
+    if(!el) return;
+    el.style.opacity='0';
+    el.style.transform='translateY(16px)';
+    setTimeout(()=>{
+      el.style.transition='opacity 0.6s ease, transform 0.6s cubic-bezier(.22,1,.36,1)';
+      el.style.opacity='1'; el.style.transform='translateY(0)';
+    }, 100 + i*130);
+  });
+  // KPI bars animate in
+  setTimeout(()=>{
+    document.querySelectorAll('.kpi-cell').forEach((cell,i)=>{
+      cell.style.opacity='0'; cell.style.transform='translateY(10px)';
+      setTimeout(()=>{
+        cell.style.transition='opacity 0.5s ease, transform 0.5s cubic-bezier(.22,1,.36,1), background .2s, box-shadow .2s';
+        cell.style.opacity='1'; cell.style.transform='translateY(0)';
+      }, 600 + i*80);
+    });
+  }, 200);
+})();
+
+// ── NUMBER COUNTER ANIMATION ───────────────────────────────────────────────────
+(function(){
+  function animateNum(el){
+    const text = el.textContent;
+    const match = text.match(/[\d.]+/);
+    if(!match) return;
+    const target = parseFloat(match[0]);
+    if(target < 1) return;
+    const prefix = text.slice(0, match.index);
+    const suffix = text.slice(match.index + match[0].length);
+    let start = null;
+    const dur = 800;
+    function step(ts){
+      if(!start) start = ts;
+      const p = Math.min((ts-start)/dur, 1);
+      const ease = 1-Math.pow(1-p, 3);
+      el.textContent = prefix + (target * ease).toFixed(match[0].includes('.')?2:0) + suffix;
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  const kpiObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        animateNum(e.target);
+        kpiObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.5});
+  document.querySelectorAll('.kpi-num').forEach(el=>kpiObs.observe(el));
+})();
+
+// Init
+updateModeler();
+renderCards();
+// Numbers browser pitch filter ON by default
+document.getElementById('pitch-toggle').classList.add('on');
+
+// Tooltips — show on mouseenter, follow cursor, hide on mouseleave
+function initTooltips(){
+  document.querySelectorAll('.tip-wrap').forEach(wrap => {
+    const tip = wrap.querySelector('.tip');
+    if(!tip) return;
+    wrap.addEventListener('mouseenter', e => {
+      tip.style.display = 'block';
+      positionTip(tip, e);
+    });
+    wrap.addEventListener('mousemove', e => positionTip(tip, e));
+    wrap.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+  });
+}
+function positionTip(tip, e){
+  const W = 260, pad = 12;
+  let x = e.clientX - W/2;
+  let y = e.clientY - tip.offsetHeight - 14;
+  if(y < 8) y = 8;
+  x = Math.max(pad, Math.min(x, window.innerWidth - W - pad));
+  tip.style.left = x + 'px';
+  tip.style.top = y + 'px';
+}
+document.addEventListener('DOMContentLoaded', initTooltips);
+</script>
+</body>
+</html>
