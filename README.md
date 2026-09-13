@@ -2,8 +2,6 @@
 
 An interactive financial intelligence dashboard proposing a $600M/yr revenue strategy for Shell, repositioning its loss-making Nature-Based Solutions (NBS) portfolio as an embedded carbon compliance instrument for the aerospace manufacturing supply chain. Built for the Shell PIE Challenge 2026.
 
-**[Live Demo](#)** · Built with vanilla HTML/CSS/JS — no dependencies, no build step
-
 ---
 
 ## The Core Thesis
