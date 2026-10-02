@@ -75,13 +75,8 @@ body::after{
 .ntab{height:100%;padding:0 1.1rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--t2);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;position:relative;top:0;white-space:nowrap;flex-shrink:0}
 .ntab:hover{color:var(--text)}
 .ntab.active{color:var(--y);border-bottom-color:var(--y);text-shadow:0 0 12px rgba(240,180,41,0.4)}
-.nav-right{display:flex;align-items:center;gap:0.8rem;flex-shrink:0}
-.live-badge{display:flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.55rem;color:var(--g);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap}
-.live-dot{width:5px;height:5px;border-radius:50%;background:var(--g);animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 @media(max-width:920px){.nav-sub,.nav-sep{display:none}}
-@media(max-width:680px){.live-badge{display:none}.ntab{padding:0 0.6rem;font-size:0.5rem}}
-
+@media(max-width:680px){.ntab{padding:0 0.6rem;font-size:0.5rem}}
 /* WRAPPER */
 .wrap{margin-top:48px;position:relative;z-index:1}
 
@@ -442,9 +437,6 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 6px rgba(245,197,
     <button class="ntab" data-sec="numbers">Search Statistics</button>
     <button class="ntab" data-sec="matrix">Strategy Matrix</button>
     <button class="ntab" data-sec="timeline">Timeline & Window</button>
-  </div>
-  <div class="nav-right">
-    <div class="live-badge"><div class="live-dot"></div> Live Dashboard</div>
   </div>
 </nav>
 
